@@ -1,9 +1,8 @@
-#include <SFML/Graphics.hpp>
-
+#include "editor.hpp"
 
 
 int main() {
-  Editor editor;
+  succotash::Editor editor;
   // Configure editor.
   editor.SetResolution(1600, 360);
 

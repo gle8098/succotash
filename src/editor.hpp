@@ -1,16 +1,16 @@
 #ifndef EDITOR_HPP
 #define EDITOR_HPP
 
-
 #include "window.hpp"
-
+#include "tool.hpp"
+#include <cstddef>
 
 namespace succotash {
 
 class Editor {
   public:
     Editor();
-    ~Editor();
+    ~Editor() = default;
 
     // Setters.
     void SetResolution(size_t width, size_t height);

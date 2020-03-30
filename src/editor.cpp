@@ -1,5 +1,8 @@
 #include "editor.hpp"
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/VideoMode.hpp>
 
+using namespace succotash;
 
 Editor::Editor()
     : window_(),
@@ -11,9 +14,9 @@ void Editor::SetResolution(size_t width, size_t height) {
 }
 
 void Editor::Run() {
-  while (window.isOpen()) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
+  while (window_.isOpen()) {
+    sf::Event event{};
+    while (window_.pollEvent(event)) {
       if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         window_.HandleClick(sf::Mouse::getPosition());
       }
