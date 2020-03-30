@@ -17,15 +17,16 @@ View::View()
 int View::GetId() const { return id_; }
 void View::SetId(int id) { id_ = id; }
 
-void View::SetLayout(Layout *layout) {
+void View::SetLayout(Layout* layout) {
   layout_ = layout;
   InvokeLayout();
 }
-Layout *View::GetLayout() const { return layout_; }
 
-View *View::GetParent() const { return parent_; }
+const Layout* View::GetLayout() const { return layout_; }
 
-const std::vector<View *> &View::GetSons() const { return sons_; }
+View* View::GetParent() const { return parent_; }
+
+const std::vector<View*>& View::GetSons() const { return sons_; }
 
 void View::AddSon(View* view) {
   sons_.push_back(view);
@@ -33,14 +34,14 @@ void View::AddSon(View* view) {
   InvokeLayout();
 }
 
-void View::InsertSonBefore(std::vector<View *>::const_iterator position,
-                           View *view) {
+void View::InsertSonBefore(std::vector<View*>::const_iterator position,
+                           View* view) {
   sons_.insert(position, view);
   view->parent_ = view;
   InvokeLayout();
 }
 
-bool View::RemoveSon(View *view) {
+bool View::RemoveSon(View* view) {
   auto it = std::find(sons_.begin(), sons_.end(), view);
   if (it != sons_.end()) {
     sons_.erase(it);
@@ -64,14 +65,14 @@ void View::Draw(sf::RenderWindow &window) const {
   DrawSelf(window);
 }
 
-
 void View::InvokeLayout() const {
   if (layout_) {
+    // This is a parent of its sons, so Place arg is correct.
     layout_->Place(this);
   }
 }
 
-void View::DrawSelf(sf::RenderWindow& window) const { /* empty */ }
+void View::DrawSelf(sf::RenderWindow& window) const { /* empty* / }
 
 } // succotash
 

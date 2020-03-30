@@ -19,7 +19,7 @@ public:
   int GetId() const;
 
   void SetLayout(Layout* layout);
-  Layout* GetLayout() const;
+  const Layout* GetLayout() const;
 
   View* GetParent() const;
   const std::vector<View*>& GetSons() const;

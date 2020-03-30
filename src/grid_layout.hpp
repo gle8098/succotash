@@ -4,15 +4,18 @@
 #include "layout.hpp"
 
 
-class GridLayout {
-public:
+struct GridLayout : Layout {
+
   int w_indent_;
   int w_count_;
   int h_indent_;
   int h_count_;
 
-public:
-  void Place(std::vector<View*> view) override;
+  void Place(const View* parent) override;
+
+private:
+
+  void PlaceLinear();
 };
 
 
