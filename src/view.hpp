@@ -15,23 +15,30 @@ class View {
 public:
   View();
 
+  void SetId(int id);
+  int GetId() const;
+
   void SetLayout(Layout* layout);
   Layout* GetLayout() const;
 
+  View* GetParent() const;
+  const std::vector<View*>& GetSons() const;
+
   virtual void AddSon(View* view);
-  virtual void InsertBefore(View* to_insert, View* before_what);
+  virtual void InsertSonBefore(std::vector<View*>::const_iterator position,
+                               View* view);
   virtual bool RemoveSon(View* view);
 
-  Result<View*> HandleClick(const sf::Vector2i& pos) const;
+  bool IsPointWithinBounds(const sf::Vector2i& point) const;
 
   void Draw(sf::RenderWindow& window) const;
 
+  virtual bool OnClickEvent(View* clicked_view) const;
+
 protected:
+  void InvokeLayout() const;
+
   virtual void DrawSelf(sf::RenderWindow& window) const;
-  virtual Result<View*> InvokeHandler();
-
-private:
-
 
 private:
   sf::RectangleShape shape_;

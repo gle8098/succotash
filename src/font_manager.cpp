@@ -2,7 +2,7 @@
 
 
 void LoadFont(const std::string& file) {
-  font.loadFromFile(file);
+  font_.loadFromFile(file);
 }
 
 sf::Font GetFont() {

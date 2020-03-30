@@ -2,24 +2,26 @@
 #define EDITOR_HPP
 
 #include "window.hpp"
-#include "tool.hpp"
-//#include <cstddef>
+#include "view.hpp"
+
 
 namespace succotash {
 
 class Editor {
-  public:
-    Editor();
-    ~Editor() = default;
+public:
+  Editor();
+  ~Editor() = default;
 
-    // Setters.
-    void SetResolution(size_t width, size_t height);
+  // Setters.
+  void SetResolution(size_t width, size_t height);
 
-    void Run();
+  void Run();
 
-  private:
-    Window window_;
-    Tool current_tool_;
+private:
+  void HandleClick(const sf::Vector2i& mouse_pos);
+
+private:
+  Window window_;
 };
 
 } // succotash

@@ -7,7 +7,7 @@ class View;
 
 
 struct Layout {
-  virtual void Place(std::vector<View*> view) = 0;
+  virtual void Place(const View* view_parent) = 0;
 };
 
 } // succotash

@@ -1,13 +1,11 @@
 #include "window.hpp"
 #include <SFML/System.hpp>
 
-using namespace succotash;
+namespace succotash {
 
-bool Window::HandleClick(const sf::Vector2i& click_pos) {
-  return master_view_.HandleClick(click_pos);
-}
+void Window::DrawViews() { master_view_.Draw(*this); }
 
-void Window::DrawViews() {
-  master_view_.Draw(*this);
-}
+const View* Window::GetMasterView() const { return &master_view_; }
+      View* Window::GetMasterView()       { return &master_view_; }
 
+}  // succotash

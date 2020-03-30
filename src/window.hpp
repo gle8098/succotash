@@ -10,7 +10,9 @@ class Window : public sf::RenderWindow {
 public:
   Window();
 
-  bool HandleClick(const sf::Vector2i &click_pos);
+  const View* GetMasterView() const;
+  View* GetMasterView();
+
   void DrawViews();
 
 private:
