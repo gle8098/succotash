@@ -1,8 +1,8 @@
 #include "editor.hpp"
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/VideoMode.hpp>
+#include <SFML/Graphics.hpp>
 
-using namespace succotash;
+//using namespace succotash;
+namespace succotash {
 
 Editor::Editor()
     : window_(),
@@ -27,3 +27,4 @@ void Editor::Run() {
   }
 }
 
+}

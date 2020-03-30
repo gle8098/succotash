@@ -1,41 +1,49 @@
 #ifndef SUCCOTASH_VIEW_HPP
 #define SUCCOTASH_VIEW_HPP
 
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Shape.hpp>
+#include <SFML/Graphics.hpp>
 #include <functional>
+#include <vector>
+
 
 namespace succotash {
+
 class Layout;
 
-class View : public sf::RectangleShape {
-  View *parent_;
-  std::vector<View *> sons_;
-  Layout *layout_;
 
-  std::function<bool(View *)> click_listener_;
-
+class View {
 public:
-  int id_;
-
   View();
 
-  void SetLayout(Layout *layout);
-  Layout * GetLayout() const;
+  void SetLayout(Layout* layout);
+  Layout* GetLayout() const;
 
-  virtual void AddSon(View *view);
-  virtual void InsertBefore(View *to_insert, View *before_what);
-  virtual bool RemoveSon(View *view);
+  virtual void AddSon(View* view);
+  virtual void InsertBefore(View* to_insert, View* before_what);
+  virtual bool RemoveSon(View* view);
 
-  bool HandleClick(const sf::Vector2i& pos) const;
+  Result<View*> HandleClick(const sf::Vector2i& pos) const;
 
-  void SetClickListener(std::function<bool(View *)>);
-  std::function<bool(View *)> GetClickListener() const;
+  void Draw(sf::RenderWindow& window) const;
 
-  void Draw() const;
-  virtual void DrawSelf() const;
+protected:
+  virtual void DrawSelf(sf::RenderWindow& window) const;
+  virtual Result<View*> InvokeHandler();
+
+private:
+
+
+private:
+  sf::RectangleShape shape_;
+  Layout* layout_;
+
+  View* parent_;
+  std::vector<View*> sons_;
+
+  int id_;
 };
-}
+
+} // succotash
 
 
 #endif // SUCCOTASH_VIEW_HPP
