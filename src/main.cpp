@@ -1,6 +1,15 @@
-#include <iostream>
-#include "SFML/Window.hpp"
+#include <SFML/Graphics.hpp>
+
+
 
 int main() {
-    std::cout << "Hello, SFML!" << std::endl;
+  Editor editor;
+  // Configure editor.
+  editor.SetResolution(1600, 360);
+
+  editor.Run();
+
+  return 0;
 }
+
+
