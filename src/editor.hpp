@@ -9,16 +9,16 @@ namespace succotash {
 
 class Editor {
 public:
-  Editor();
+  Editor() = default;
   ~Editor() = default;
 
-  // Setters.
-  void SetResolution(size_t width, size_t height);
+  Window* GetWindow();
+  const Window* GetWindow() const;
 
   void Run();
 
 private:
-  void HandleClick(const sf::Vector2i& mouse_pos);
+  void HandleClick(const sf::Event::MouseButtonEvent& mouse_pos);
 
 private:
   Window window_;

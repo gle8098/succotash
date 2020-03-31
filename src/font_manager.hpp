@@ -4,10 +4,8 @@
 #include <SFML/Graphics.hpp>
 
 
-static sf::Font font_;
-
-void LoadFont(const std::string& file);
-sf::Font GetFont();
+void LoadDefaultFont(const std::string& file);
+const sf::Font& GetDefaultFont();
 
 #endif // FONT_MANAGER_HPP
 

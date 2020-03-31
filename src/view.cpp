@@ -1,6 +1,6 @@
 #include "view.hpp"
 #include <algorithm>
-
+#include "layout.hpp"
 
 namespace succotash {
 
@@ -52,6 +52,9 @@ bool View::RemoveSon(View* view) {
   return false;
 }
 
+      sf::RectangleShape &View::GetViewShape()       { return shape_; }
+const sf::RectangleShape &View::GetViewShape() const { return shape_; }
+
 bool View::IsPointWithinBounds(const sf::Vector2i &point) const {
   return shape_.getGlobalBounds().contains(point.x, point.y);
 }
@@ -72,7 +75,7 @@ void View::InvokeLayout() const {
   }
 }
 
-void View::DrawSelf(sf::RenderWindow& window) const { /* empty* / }
+void View::DrawSelf(sf::RenderWindow& window) const { /* empty */ }
 
 } // succotash
 

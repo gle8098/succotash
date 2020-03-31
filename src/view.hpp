@@ -29,6 +29,8 @@ public:
                                View* view);
   virtual bool RemoveSon(View* view);
 
+  sf::RectangleShape& GetViewShape();
+  const sf::RectangleShape& GetViewShape() const;
   bool IsPointWithinBounds(const sf::Vector2i& point) const;
 
   void Draw(sf::RenderWindow& window) const;
@@ -40,8 +42,9 @@ protected:
 
   virtual void DrawSelf(sf::RenderWindow& window) const;
 
-private:
   sf::RectangleShape shape_;
+
+private:
   Layout* layout_;
 
   View* parent_;

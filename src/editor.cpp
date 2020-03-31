@@ -3,29 +3,37 @@
 
 namespace succotash {
 
-Editor::Editor()
-    : window_() {
-}
-
-void Editor::SetResolution(size_t width, size_t height) {
-  window_.create(sf::VideoMode(width, height), "Succotash");
-}
+Window *Editor::GetWindow() { return &window_; }
+const Window *Editor::GetWindow() const { return &window_; }
 
 void Editor::Run() {
   while (window_.isOpen()) {
-    sf::Event event{};
-    while (window_.pollEvent(event)) {
-      if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        HandleClick(sf::Mouse::getPosition());
-      }
-    }
+    // Redraw window
     window_.clear();
     window_.DrawViews();
     window_.display();
+
+    // Wait for event
+    sf::Event event{};
+    //printf("Waiting event... "); fflush(stdout);
+    window_.waitEvent(event);
+    //printf("Event type %d\n", event.type);
+
+    switch (event.type) {
+    case sf::Event::Closed:
+      window_.close();
+      break;
+
+    case sf::Event::MouseButtonPressed:
+      if (event.mouseButton.button == sf::Mouse::Left) {
+        HandleClick(event.mouseButton);
+      }
+      break;
+    }
   }
 }
 
-void Editor::HandleClick(const sf::Vector2i& mouse_pos) {
+void Editor::HandleClick(const sf::Event::MouseButtonEvent& mouse_pos) {
   View* master_view = window_.GetMasterView();
   View* cur_view = master_view;
 
@@ -34,7 +42,7 @@ void Editor::HandleClick(const sf::Vector2i& mouse_pos) {
   while (!clicked_view_found) {
     // Iterate for every son & check if click within its bounds
     for (View *son : cur_view->GetSons()) {
-      if (son->IsPointWithinBounds(mouse_pos)) {
+      if (son->IsPointWithinBounds(sf::Vector2i(mouse_pos.x, mouse_pos.y))) {
         cur_view = son;
         break;
       }
@@ -45,12 +53,12 @@ void Editor::HandleClick(const sf::Vector2i& mouse_pos) {
 
   // 2. Propagate mouse event
   View* original_clicked_view = cur_view;
-  do {
+  while (cur_view != nullptr) {
     if (cur_view->OnClickEvent(original_clicked_view)) {
       return;
     }
     cur_view = cur_view->GetParent();
-  } while (cur_view != master_view);
+  }
 }
 
 }  // succotash

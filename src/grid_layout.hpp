@@ -3,7 +3,7 @@
 
 #include "layout.hpp"
 
-
+/*
 struct GridLayout : Layout {
 
   int w_indent_;
@@ -17,7 +17,7 @@ private:
 
   void PlaceLinear();
 };
-
+*/
 
 #endif // GRID_LAYOUT_HPP
 

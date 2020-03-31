@@ -1,5 +1,5 @@
-#ifndef SUCCOTASH_LAYOUT_HPP
-#define SUCCOTASH_LAYOUT_HPP
+#ifndef SUCCOTASH_GRID_LAYOUT_HPP
+#define SUCCOTASH_GRID_LAYOUT_HPP
 
 namespace succotash {
 
@@ -12,5 +12,4 @@ struct Layout {
 
 } // succotash
 
-#endif // SUCCOTASH_LAYOUT_HPP
-
+#endif // SUCCOTASH_GRID_LAYOUT_HPP

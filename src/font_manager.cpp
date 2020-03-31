@@ -1,11 +1,12 @@
 #include "font_manager.hpp"
 
+static sf::Font default_font;
 
-void LoadFont(const std::string& file) {
-  font_.loadFromFile(file);
+void LoadDefaultFont(const std::string& file) {
+  default_font.loadFromFile(file);
 }
 
-sf::Font GetFont() {
-  return font_;
+const sf::Font& GetDefaultFont() {
+  return default_font;
 }
 
