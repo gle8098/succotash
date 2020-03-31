@@ -34,3 +34,6 @@
 # CLion
 .idea
 cmake-build-debug
+
+# Vim files
+*.swp
