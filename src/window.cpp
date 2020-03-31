@@ -1,11 +1,13 @@
 #include "window.hpp"
+
 #include <SFML/System.hpp>
+
 
 namespace succotash {
 
 Window::Window(unsigned int width, unsigned int height) {
   create(sf::VideoMode(width, height), "Succotash");
-  master_view_.GetViewShape().setPosition(0, 0);
+  master_view_.MoveTo(sf::Vector2f(0, 0));
   UpdateWindowSize();
 }
 
@@ -16,7 +18,7 @@ View *Window::GetMasterView() { return &master_view_; }
 
 void Window::UpdateWindowSize() {
   auto size = getSize();
-  master_view_.GetViewShape().setSize(sf::Vector2f(size.x, size.y));
+  master_view_.Resize(sf::Vector2f(size.x, size.y));
 }
 
 } // succotash

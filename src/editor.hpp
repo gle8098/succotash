@@ -12,10 +12,10 @@ public:
   Editor() = default;
   ~Editor() = default;
 
+  void Run();
+
   Window* GetWindow();
   const Window* GetWindow() const;
-
-  void Run();
 
 private:
   void HandleClick(const sf::Event::MouseButtonEvent& mouse_pos);

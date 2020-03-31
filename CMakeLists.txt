@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
 project(succotash)
 
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}   -Wall -O0 -g")
+
 find_library(SFML_LIBRARIES
              NAMES sfml-graphics sfml-window sfml-system)
 

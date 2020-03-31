@@ -1,35 +1,34 @@
 #include "editor.hpp"
+
 #include <SFML/Graphics.hpp>
+
 
 namespace succotash {
 
-Window *Editor::GetWindow() { return &window_; }
-const Window *Editor::GetWindow() const { return &window_; }
-
 void Editor::Run() {
   while (window_.isOpen()) {
-    // Redraw window
-    window_.clear();
-    window_.DrawViews();
-    window_.display();
-
     // Wait for event
-    sf::Event event{};
-    //printf("Waiting event... "); fflush(stdout);
+    sf::Event event;
+    //printf("Waiting event... \n");
     window_.waitEvent(event);
     //printf("Event type %d\n", event.type);
 
     switch (event.type) {
-    case sf::Event::Closed:
-      window_.close();
-      break;
-
-    case sf::Event::MouseButtonPressed:
-      if (event.mouseButton.button == sf::Mouse::Left) {
-        HandleClick(event.mouseButton);
-      }
-      break;
+      case sf::Event::Closed:
+        window_.close();
+        break;
+      case sf::Event::MouseButtonPressed:
+        if (event.mouseButton.button == sf::Mouse::Left) {
+          HandleClick(event.mouseButton);
+        }
+        break;
+      default:
+        break;
     }
+    // Redraw window
+    window_.clear();
+    window_.DrawViews();
+    window_.display();
   }
 }
 
@@ -61,4 +60,8 @@ void Editor::HandleClick(const sf::Event::MouseButtonEvent& mouse_pos) {
   }
 }
 
+Window*       Editor::GetWindow()       { return &window_; }
+const Window* Editor::GetWindow() const { return &window_; }
+
 }  // succotash
+

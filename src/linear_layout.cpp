@@ -1,24 +1,33 @@
 #include "linear_layout.hpp"
 #include "view.hpp"
 
+
 succotash::LinearLayout::LinearLayout(bool vertical)
   : is_vertical_(vertical)
 {}
 
 void succotash::LinearLayout::Place(const succotash::View *view_parent) {
-  auto parent_pos  = view_parent->GetViewShape().getPosition();
-  auto parent_size = view_parent->GetViewShape().getSize();
+  auto views = view_parent->GetSons();
+
+  //sf::RectangleShape frame = view_parent->GetShape();
+  auto parent_pos  = view_parent->GetShape().getPosition();
+  auto parent_size = view_parent->GetShape().getSize();
 
   if (is_vertical_) {
     // Put views in a column
-    float x_step = parent_size.x / view_parent->GetSons().size();
-    float current_x = parent_pos.x;
 
-    for (View* son : view_parent->GetSons()) {
-      auto& shape = son->GetViewShape();
-      shape.setPosition(sf::Vector2f(current_x, parent_pos.y));
-      shape.setSize(sf::Vector2f(x_step, parent_size.y));
-      current_x += x_step;
+    //sf::Vector2f new_pos = frame.getPosition();
+    //float x_step = new_pos.x / views.size();
+    //sf::Vector2f view_size = sf::Vector2f(x_step, frame.getSize().y);
+
+    float x_step = parent_size.x / views.size();
+    sf::Vector2f new_pos(parent_pos.x, parent_pos.y);
+    sf::Vector2f view_size = sf::Vector2f(x_step, parent_size.y);
+
+    for (View* son : views) {
+      son->MoveTo(new_pos);
+      son->Resize(view_size);
+      new_pos.x += x_step;
     }
   } else {
     // Put views in a row

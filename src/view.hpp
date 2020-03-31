@@ -2,7 +2,6 @@
 #define SUCCOTASH_VIEW_HPP
 
 #include <SFML/Graphics.hpp>
-#include <functional>
 #include <vector>
 
 
@@ -14,39 +13,40 @@ class Layout;
 class View {
 public:
   View();
+  ~View() = default;
 
-  void SetId(int id);
-  int GetId() const;
-
-  void SetLayout(Layout* layout);
-  const Layout* GetLayout() const;
-
-  View* GetParent() const;
-  const std::vector<View*>& GetSons() const;
-
-  virtual void AddSon(View* view);
-  virtual void InsertSonBefore(std::vector<View*>::const_iterator position,
-                               View* view);
-  virtual bool RemoveSon(View* view);
-
-  sf::RectangleShape& GetViewShape();
-  const sf::RectangleShape& GetViewShape() const;
   bool IsPointWithinBounds(const sf::Vector2i& point) const;
-
   void Draw(sf::RenderWindow& window) const;
 
+  void AddSon(View* view);
+  void InsertSonBefore(std::vector<View*>::const_iterator position, View* view);
+  bool RemoveSon(View* view);
+
   virtual bool OnClickEvent(View* clicked_view) const;
+
+  virtual void MoveTo(const sf::Vector2f& new_pos);
+  virtual void Resize(const sf::Vector2f& new_size);
+
+  void SetId(int id); // Should not have external access (move to private).
+  void SetLayout(Layout* layout);
+
+  int                       GetId() const;
+  const Layout*             GetLayout() const;
+  View*                     GetParent() const;
+  const std::vector<View*>& GetSons() const;
+  sf::RectangleShape        GetShape() const;
 
 protected:
   void InvokeLayout() const;
 
   virtual void DrawSelf(sf::RenderWindow& window) const;
 
+// Fields.
+protected:
   sf::RectangleShape shape_;
-
-private:
   Layout* layout_;
 
+private:
   View* parent_;
   std::vector<View*> sons_;
 

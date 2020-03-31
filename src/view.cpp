@@ -1,32 +1,33 @@
 #include "view.hpp"
+
 #include <algorithm>
+
 #include "layout.hpp"
 
-namespace succotash {
 
+namespace succotash {
 
 View::View()
     : shape_(),
       layout_(nullptr),
       parent_(nullptr),
       id_(0) {
-
-
 }
 
-int View::GetId() const { return id_; }
-void View::SetId(int id) { id_ = id; }
+//------------------------------------------------------------------------------
+// Public.
+//------------------------------------------------------------------------------
 
-void View::SetLayout(Layout* layout) {
-  layout_ = layout;
-  InvokeLayout();
+bool View::IsPointWithinBounds(const sf::Vector2i& point) const {
+  return shape_.getGlobalBounds().contains(point.x, point.y);
 }
 
-const Layout* View::GetLayout() const { return layout_; }
-
-View* View::GetParent() const { return parent_; }
-
-const std::vector<View*>& View::GetSons() const { return sons_; }
+void View::Draw(sf::RenderWindow &window) const {
+  for (View* son : sons_) {
+    son->Draw(window);
+  }
+  DrawSelf(window);
+}
 
 void View::AddSon(View* view) {
   sons_.push_back(view);
@@ -52,25 +53,40 @@ bool View::RemoveSon(View* view) {
   return false;
 }
 
-      sf::RectangleShape &View::GetViewShape()       { return shape_; }
-const sf::RectangleShape &View::GetViewShape() const { return shape_; }
-
-bool View::IsPointWithinBounds(const sf::Vector2i &point) const {
-  return shape_.getGlobalBounds().contains(point.x, point.y);
-}
-
 bool View::OnClickEvent(View* clicked_view) const { return false; }
 
-void View::Draw(sf::RenderWindow &window) const {
-  for (View* son : sons_) {
-    son->Draw(window);
-  }
-  DrawSelf(window);
+void View::MoveTo(const sf::Vector2f& new_pos) {
+  shape_.setPosition(new_pos);
 }
+
+void View::Resize(const sf::Vector2f& new_size) {
+  shape_.setSize(new_size);
+}
+
+//------------------------------------------------------------------------------
+// Set & Get.
+//------------------------------------------------------------------------------
+
+int View::GetId() const { return id_; }
+void View::SetId(int id) { id_ = id; }
+
+void View::SetLayout(Layout* layout) {
+  layout_ = layout;
+  InvokeLayout();
+}
+
+const Layout*             View::GetLayout() const { return layout_; }
+View*                     View::GetParent() const { return parent_; }
+const std::vector<View*>& View::GetSons()   const { return sons_; }
+sf::RectangleShape        View::GetShape()  const { return shape_; }
+
+//------------------------------------------------------------------------------
+// Protected.
+//------------------------------------------------------------------------------
 
 void View::InvokeLayout() const {
   if (layout_) {
-    // This is a parent of its sons, so Place arg is correct.
+    // 'This' is a parent of its sons, so Place arg is correct.
     layout_->Place(this);
   }
 }
