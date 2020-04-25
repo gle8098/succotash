@@ -20,8 +20,8 @@ public:
   bool OnClickEvent(View* clicked_view) const override;
 
 private:
-  void MoveTo(const sf::Vector2f& new_pos);
-  void Resize(const sf::Vector2f& new_size);
+  void MoveTo(const sf::Vector2f& new_pos) override;
+  void Resize(const sf::Vector2f& new_size) override;
 
 private:
   sf::Text text_;

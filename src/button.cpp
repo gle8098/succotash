@@ -11,7 +11,6 @@ Button::Button(const sf::String& string,
                std::function<void(const Button*)> action)
     : text_(string, GetDefaultFont()),
       action_(std::move(action)) {
-  text_.setPosition(shape_.getPosition());
   text_.setFillColor(sf::Color::Black);
   shape_.setFillColor(sf::Color::White);
   shape_.setOutlineColor(sf::Color::Red);

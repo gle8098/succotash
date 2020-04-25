@@ -18,6 +18,7 @@ void Editor::Run() {
 
   while (display_.isOpen()) {
     sf::Event event;
+<<<<<<< HEAD
 
     while (display_.pollEvent(event)) {
       switch (event.type) {
@@ -35,6 +36,26 @@ void Editor::Run() {
       default:
         break;
       }
+=======
+    printf("Waiting event... "); fflush(stdout);
+    window_.waitEvent(event);
+    printf("Event type %d\n", event.type);
+
+    switch (event.type) {
+    case sf::Event::Closed:
+      window_.close();
+      break;
+    case sf::Event::MouseButtonPressed:
+      if (event.mouseButton.button == sf::Mouse::Left) {
+        HandleClick(event.mouseButton);
+      }
+      break;
+    case sf::Event::Resized:
+      window_.UpdateWindowSize();
+      break;
+    default:
+      break;
+>>>>>>> bb0c23daa7fa59cf6fc1fc509dde67f0b653317f
     }
     // Redraw window
     display_.clear();
