@@ -9,25 +9,25 @@ namespace succotash {
 
 Button::Button(const sf::String& string,
                std::function<void(const Button*)> action)
+
     : text_(string, GetDefaultFont()),
       action_(std::move(action)) {
+
   text_.setFillColor(sf::Color::Black);
   shape_.setFillColor(sf::Color::White);
   shape_.setOutlineColor(sf::Color::Red);
   shape_.setOutlineThickness(3);
 }
 
-void Button::DrawSelf(sf::RenderWindow& window) const {
-  window.draw(shape_);
-  window.draw(text_);
+void Button::DrawSelf(sf::RenderWindow& display) const {
+  display.draw(shape_);
+  display.draw(text_);
 }
 
-bool Button::OnClickEvent(View* clicked_view) const {
+void Button::OnClickEvent(View* clicked_view) {
   if (action_) {
     action_(this);
-    return true;
   }
-  return View::OnClickEvent(clicked_view);
 }
 
 const sf::String& Button::GetText() const {

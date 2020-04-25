@@ -16,11 +16,11 @@ public:
 
   const sf::String& GetText() const;
 
-  void DrawSelf(sf::RenderWindow& window) const override;
-  bool OnClickEvent(View* clicked_view) const override;
-
 private:
-  void MoveTo(const sf::Vector2f& new_pos) override;
+  void DrawSelf(sf::RenderWindow& window) const override;
+  void OnClickEvent(View* clicked_view)   override;
+
+  void MoveTo(const sf::Vector2f& new_pos)  override;
   void Resize(const sf::Vector2f& new_size) override;
 
 private:

@@ -22,11 +22,11 @@ bool View::IsPointWithinBounds(const sf::Vector2i& point) const {
   return shape_.getGlobalBounds().contains(point.x, point.y);
 }
 
-void View::Draw(sf::RenderWindow &window) const {
+void View::Draw(sf::RenderWindow &display) const {
   for (View* son : sons_) {
-    son->Draw(window);
+    son->Draw(display);
   }
-  DrawSelf(window);
+  DrawSelf(display);
 }
 
 void View::AddSon(View* view) {
@@ -53,7 +53,25 @@ bool View::RemoveSon(View* view) {
   return false;
 }
 
-bool View::OnClickEvent(View* clicked_view) const { return false; }
+View* View::HandleClick(const sf::Vector2i& click_pos) {
+  View* clicked_view = nullptr;
+
+  for (auto son : sons_) {
+    if (son->IsPointWithinBounds(click_pos)) {
+      clicked_view = son->HandleClick(click_pos);
+      break;
+    }
+  }
+
+  OnClickEvent(clicked_view);
+
+  if (clicked_view == nullptr) {  // Current view is the deepest one.
+    return this;
+  }
+  return clicked_view;
+}
+
+void View::OnClickEvent(View* clicked_view) { /* Virtual */ }
 
 void View::MoveTo(const sf::Vector2f& new_pos) {
   shape_.setPosition(new_pos);
@@ -77,8 +95,8 @@ void View::SetLayout(Layout* layout) {
 
 const Layout*             View::GetLayout() const { return layout_; }
 View*                     View::GetParent() const { return parent_; }
-const std::vector<View*>& View::GetSons()   const { return sons_; }
-sf::RectangleShape        View::GetShape()  const { return shape_; }
+const std::vector<View*>& View::GetSons()   const { return sons_;   }
+sf::RectangleShape        View::GetShape()  const { return shape_;  }
 
 //------------------------------------------------------------------------------
 // Protected.
@@ -91,7 +109,7 @@ void View::InvokeLayout() const {
   }
 }
 
-void View::DrawSelf(sf::RenderWindow& window) const { /* empty */ }
+void View::DrawSelf(sf::RenderWindow& display) const { /* Virtual */ }
 
 } // succotash
 
