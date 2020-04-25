@@ -5,36 +5,46 @@
 
 namespace succotash {
 
-void Editor::Run() {
-  while (window_.isOpen()) {
-    // Wait for event
-    sf::Event event;
-    //printf("Waiting event... \n");
-    window_.waitEvent(event);
-    //printf("Event type %d\n", event.type);
+Editor::Editor()
+    : display_(sf::VideoMode(800, 600), "Succotash") {
 
-    switch (event.type) {
+  display_.setFramerateLimit(50);
+
+  master_view_.MoveTo(sf::Vector2f(0, 0));
+  master_view_.Resize(sf::Vector2f(800, 600));  // tmp
+}
+
+void Editor::Run() {
+
+  while (display_.isOpen()) {
+    sf::Event event;
+
+    while (display_.pollEvent(event)) {
+      switch (event.type) {
+
       case sf::Event::Closed:
-        window_.close();
+        display_.close();
         break;
+
       case sf::Event::MouseButtonPressed:
         if (event.mouseButton.button == sf::Mouse::Left) {
           HandleClick(event.mouseButton);
         }
         break;
+
       default:
         break;
+      }
     }
     // Redraw window
-    window_.clear();
-    window_.DrawViews();
-    window_.display();
+    display_.clear();
+    master_view_.Draw(display_);
+    display_.display();
   }
 }
 
 void Editor::HandleClick(const sf::Event::MouseButtonEvent& mouse_pos) {
-  View* master_view = window_.GetMasterView();
-  View* cur_view = master_view;
+  View* cur_view = &master_view_;
 
   // 1. Find clicked View. Go down in the tree.
   bool clicked_view_found = false;
@@ -60,8 +70,8 @@ void Editor::HandleClick(const sf::Event::MouseButtonEvent& mouse_pos) {
   }
 }
 
-Window*       Editor::GetWindow()       { return &window_; }
-const Window* Editor::GetWindow() const { return &window_; }
+const View& Editor::GetMasterView() const { return master_view_; }
+View&       Editor::GetMasterView()       { return master_view_; }
 
 }  // succotash
 

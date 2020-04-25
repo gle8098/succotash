@@ -9,7 +9,6 @@ namespace succotash {
 
 class Layout;
 
-
 class View {
 public:
   View();

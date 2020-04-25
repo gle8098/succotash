@@ -1,7 +1,6 @@
 #ifndef EDITOR_HPP
 #define EDITOR_HPP
 
-#include "window.hpp"
 #include "view.hpp"
 
 
@@ -9,19 +8,20 @@ namespace succotash {
 
 class Editor {
 public:
-  Editor() = default;
+  Editor();
   ~Editor() = default;
 
   void Run();
 
-  Window* GetWindow();
-  const Window* GetWindow() const;
+  const View& GetMasterView() const;
+  View&       GetMasterView();
 
 private:
   void HandleClick(const sf::Event::MouseButtonEvent& mouse_pos);
 
 private:
-  Window window_;
+  View master_view_;
+  sf::RenderWindow display_;
 };
 
 } // succotash
