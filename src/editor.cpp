@@ -9,21 +9,24 @@ void Editor::Run() {
   while (window_.isOpen()) {
     // Wait for event
     sf::Event event;
-    //printf("Waiting event... \n");
+    printf("Waiting event... "); fflush(stdout);
     window_.waitEvent(event);
-    //printf("Event type %d\n", event.type);
+    printf("Event type %d\n", event.type);
 
     switch (event.type) {
-      case sf::Event::Closed:
-        window_.close();
-        break;
-      case sf::Event::MouseButtonPressed:
-        if (event.mouseButton.button == sf::Mouse::Left) {
-          HandleClick(event.mouseButton);
-        }
-        break;
-      default:
-        break;
+    case sf::Event::Closed:
+      window_.close();
+      break;
+    case sf::Event::MouseButtonPressed:
+      if (event.mouseButton.button == sf::Mouse::Left) {
+        HandleClick(event.mouseButton);
+      }
+      break;
+    case sf::Event::Resized:
+      window_.UpdateWindowSize();
+      break;
+    default:
+      break;
     }
     // Redraw window
     window_.clear();
