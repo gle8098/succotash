@@ -1,9 +1,7 @@
 #include "linear_layout.hpp"
 #include "view.hpp"
-#include "assert.hpp"
+//#include "assert.hpp"
 
-
-namespace succotash {
 
 int GetTotalWeight(std::vector<int>& weights) {
   int total_weight = 0;
@@ -13,16 +11,8 @@ int GetTotalWeight(std::vector<int>& weights) {
   return total_weight;
 }
 
-void AlignWeights(std::vector<int>& weights, std::vector<View*>& views) {
-  size_t views_cnt = views.size();
-  size_t weights_cnt = weights.size();
-  if (weights_cnt < views_cnt) {
-    weights.resize(views_cnt, 1); // Append zeros.
-  } else {
-    weights.resize(views_cnt);    // Append zeros.
-  }
-}
 
+namespace succotash {
 
 LinearLayout::LinearLayout(Type orientation)
     : orientation_(orientation),
@@ -32,8 +22,7 @@ LinearLayout::LinearLayout(Type orientation)
 void LinearLayout::Place(const succotash::View *parent_view) {
   auto views = parent_view->GetSons();
   if (views.size() != weights_.size()) {
-    AlignWeights(weights_, views);
-    ASSERT(views.size() == weights_.size());
+    weights_.resize(views.size(), 1); // Append ones or remove weights tail.
   }
 
   auto area_pos  = parent_view->GetShape().getPosition();
