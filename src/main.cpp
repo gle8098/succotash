@@ -28,7 +28,10 @@ int main() {
   master_view.AddSon(button2);
   master_view.AddSon(button3);
 
-  master_view.SetLayout(new LinearLayout(LinearLayout::Type::Vertical));
+  LinearLayout layout(LinearLayout::Type::Horizontal);
+  std::vector<int> weights = {4, 2, 3};
+  layout.SetWeights(weights);
+  master_view.SetLayout(&layout);
   // TODO: memory leak
 
   editor.Run();
