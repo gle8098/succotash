@@ -44,19 +44,22 @@ void LinearLayout::Place(const succotash::View *parent_view) {
       new_pos.x += view_size.x;
     }
   } else {  // Put views in a column.
-    float y_step = area_size.y / views.size();
-    sf::Vector2f new_pos(area_pos.x, area_pos.y);
-    sf::Vector2f view_size = sf::Vector2f(area_size.x, y_step);
+    for (size_t i = 0; i < views_cnt; ++i) {
+      View* view = views[i];
+      double weight_ratio = (double)weights_[i] / total_weight;
+      sf::Vector2f view_size(area_size.x, area_size.y * weight_ratio);
 
-    for (View* son : views) {
-      son->MoveTo(new_pos);
-      son->Resize(view_size);
+      view->MoveTo(new_pos);
+      view->Resize(view_size);
       new_pos.y += view_size.y;
     }
   }
 }
 
 void LinearLayout::SetWeights(std::vector<int>& weights) {
+  weights_ = std::move(weights);
+}
+void LinearLayout::SetWeights(std::vector<int>&& weights) {
   weights_ = std::move(weights);
 }
 

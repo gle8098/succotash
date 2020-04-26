@@ -15,7 +15,8 @@ public:
 
   LinearLayout(Type orientation);
 
-  void SetWeights(std::vector<int>& weights);
+  void SetWeights(std::vector<int>&  weights);
+  void SetWeights(std::vector<int>&& weights);
   void Place(const View* parent_view) override;
 
 private:
