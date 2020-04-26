@@ -25,6 +25,7 @@ public:
   virtual void OnClickEvent(View* clicked_view);
 
   virtual void MoveTo(const sf::Vector2f& new_pos);
+  virtual void MoveBy(const sf::Vector2f& offset);
   virtual void Resize(const sf::Vector2f& new_size);
 
   void SetId(int id); // Should not have external access (move to private).

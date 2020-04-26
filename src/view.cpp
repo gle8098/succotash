@@ -74,7 +74,18 @@ View* View::HandleClick(const sf::Vector2i& click_pos) {
 void View::OnClickEvent(View* clicked_view) { /* Virtual */ }
 
 void View::MoveTo(const sf::Vector2f& new_pos) {
+  auto offset = shape_.getPosition() - new_pos;
+  for (View* son : sons_) {
+    son->MoveBy(offset);
+  }
   shape_.setPosition(new_pos);
+}
+
+void View::MoveBy(const sf::Vector2f& offset) {
+  for (View* son : sons_) {
+    son->MoveBy(offset);
+  }
+  shape_.move(offset);
 }
 
 void View::Resize(const sf::Vector2f& new_size) {
@@ -106,6 +117,9 @@ void View::InvokeLayout() const {
   if (layout_) {
     // 'This' is a parent of its sons, so Place arg is correct.
     layout_->Place(this);
+  }
+  for (View* son : sons_) {
+    son->InvokeLayout();
   }
 }
 
