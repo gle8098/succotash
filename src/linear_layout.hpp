@@ -2,16 +2,25 @@
 #define SUCCOTASH_LINEAR_LAYOUT_HPP
 
 #include "layout.hpp"
+#include <vector>
 
 namespace succotash {
 
-struct LinearLayout : Layout {
-  LinearLayout(bool vertical);
+class LinearLayout : public Layout {
+public:
+  enum Type {
+    Vertical,
+    Horizontal,
+  };
 
-  void Place(const View* view_parent) override;
+  LinearLayout(Type orientation);
+
+  void SetWeights(std::vector<int>& weights);
+  void Place(const View* parent_view) override;
 
 private:
-  bool is_vertical_;
+  Type orientation_;
+  std::vector<int> weights_;
 };
 
 } // succotash
