@@ -1,6 +1,7 @@
 #include "view.hpp"
 
 #include <algorithm>
+#include <utility>
 
 #include "layout.hpp"
 
@@ -124,6 +125,27 @@ void View::InvokeLayout() const {
 }
 
 void View::DrawSelf(sf::RenderWindow& display) const { /* Virtual */ }
+
+
+void View::SetParentLayoutParams(StringHashTable<std::string> parent_layout_params) {
+  parent_layout_params_ = std::move(parent_layout_params);
+}
+const StringHashTable<std::string>& View::GetParentLayoutParams() const {
+  return parent_layout_params_;
+}
+
+View* View::FindViewById(int id) {
+  if (id_ == id) {
+    return this;
+  }
+  for (auto son : sons_) {
+    View* needle = son->FindViewById(id);
+    if (needle != nullptr) {
+      return needle;
+    }
+  }
+  return nullptr;
+}
 
 } // succotash
 
