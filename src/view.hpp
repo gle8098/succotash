@@ -38,7 +38,7 @@ public:
   sf::RectangleShape        GetShape()  const;
 
 protected:
-  void InvokeLayout() const;
+  void InvokeLayout();  // Not const.
 
   virtual void DrawSelf(sf::RenderWindow& display) const;
 

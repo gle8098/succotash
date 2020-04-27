@@ -17,7 +17,8 @@ public:
 
   void SetWeights(std::vector<int>&  weights);
   void SetWeights(std::vector<int>&& weights);
-  void Place(const View* parent_view) override;
+  void Place(std::vector<View*>& views,
+             const sf::RectangleShape& area) override;
 
 private:
   Type orientation_;

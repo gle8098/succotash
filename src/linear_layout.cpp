@@ -19,14 +19,14 @@ LinearLayout::LinearLayout(Type orientation)
       weights_()
 {}
 
-void LinearLayout::Place(const succotash::View *parent_view) {
-  auto views = parent_view->GetSons();
+void LinearLayout::Place(std::vector<View*>& views,
+                         const sf::RectangleShape& area) {
   if (views.size() != weights_.size()) {
     weights_.resize(views.size(), 1); // Append ones or remove weights tail.
   }
 
-  auto area_pos  = parent_view->GetShape().getPosition();
-  auto area_size = parent_view->GetShape().getSize();
+  auto area_pos  = area.getPosition();
+  auto area_size = area.getSize();
 
   int total_weight = GetTotalWeight(weights_);
 
