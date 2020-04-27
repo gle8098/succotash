@@ -11,9 +11,11 @@ namespace succotash {
 
 class Button : public View {
 public:
+  Button(const sf::String& string);
   Button(const sf::String& string, std::function<void(const Button*)> action);
   ~Button() = default;
 
+  void SetAction(std::function<void(const Button*)> action);
   const sf::String& GetText() const;
 
 private:
