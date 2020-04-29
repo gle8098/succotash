@@ -1,12 +1,13 @@
 #include "ModelParser.hpp"
 
-#include <StringHashTable.hpp>
 #include <cstdarg>
 #include <cstring>
 #include <fstream>
 #include <pugixml.hpp>
 
+#include "../utilities/StringHashTable.hpp"
 #include "ParsingObjects.hpp"
+#include "../utilities/Convertible.hpp"
 
 namespace succotash::xml {
 
@@ -44,37 +45,37 @@ struct Parser {
 
  private:
   View* ParseModelRecursive(const pugi::xml_node& tag) {
-    auto view_fact_it = kViewFactories.find(tag.name());
-    if (view_fact_it == kViewFactories.end()) {
+    auto view_fact_it = view_factories.find(tag.name());
+    if (view_fact_it == view_factories.end()) {
       ThrowParseException(tag.offset_debug(), "View class was not found");
     }
     ObjectFactory<View> view_factory = view_fact_it->second;
 
-    StringHashTable<pugi::xml_attribute> view_params;
-    StringHashTable<pugi::xml_attribute> layout_params;
-    StringHashTable<std::string> parent_params;
-    ObjectFactory<Layout> layout_factory = nullptr;
+    StringHashTable<Convertible> view_params;
+    StringHashTable<Convertible> layout_params;
+    StringHashTable<Convertible> parent_params;
+    LayoutFactories* my_layout_factories = nullptr;
 
     for (auto attr : tag.attributes()) {
       std::string name = attr.name();
 
       if (name.rfind("layout:", 0) == 0) {
         std::string key = name.substr(strlen("layout:"));
-        layout_params[key] = attr;
+        layout_params.emplace(key, attr.value());
 
       } else if (name.rfind("layout", 0) == 0) {
-        auto layout_fact_it = kLayoutFactories.find(attr.value());
-        if (layout_fact_it == kLayoutFactories.end()) {
+        auto layout_fact_it = layout_factories.find(attr.value());
+        if (layout_fact_it == layout_factories.end()) {
           ThrowParseException(tag.offset_debug(), "Layout class was not found");
         }
-        layout_factory = layout_fact_it->second;
+        my_layout_factories = &layout_fact_it->second;
 
       } else if (name.rfind("parent:", 0) == 0) {
         std::string key = name.substr(strlen("parent:"));
-        parent_params[key] = attr.value();
+        parent_params.emplace(key, attr.value());
 
       } else if (name.find(':') == std::string::npos) {
-        view_params[name] = attr;
+        view_params.emplace(name, attr.value());
 
       } else if (name.rfind("xmlns:", 0) != 0) {
         // This is not from above and not xmlns namespace... than what is it?
@@ -82,11 +83,20 @@ struct Parser {
       }
     }
 
-    View* view = view_factory(view_params);
-    Layout* layout = layout_factory ? layout_factory(layout_params) : nullptr;
+    View* view = nullptr;
+    Layout* layout = nullptr;
+    LayoutParams* params = nullptr;
+
+    try {
+      view = view_factory(view_params);
+      layout = my_layout_factories ? my_layout_factories->layout_factory(layout_params) : nullptr;
+      params = my_layout_factories ? my_layout_factories->params_factory(parent_params) : nullptr;
+    } catch (std::exception& ex) {
+      ThrowParseException(tag.offset_debug(), ex.what());
+    }
 
     view->SetLayout(layout);
-    view->SetParentLayoutParams(parent_params);
+    view->SetDispositionParams(params);
 
     for (auto child : tag.children()) {
       View* son = ParseModelRecursive(child);

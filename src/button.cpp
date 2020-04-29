@@ -3,9 +3,19 @@
 #include <utility>  // std::move
 
 #include "font_manager.hpp"
+#include "utilities/Convertible.hpp"
 
 
 namespace succotash {
+
+Button* Button::Construct(const utilities::StringHashTable<utilities::Convertible>& params, Button* view) {
+  if (view == nullptr) {
+    auto sf_name = sf::String(params.at("name").ToString());
+    view = new Button(sf_name);
+  }
+  View::Construct(params, view);
+  return view;
+}
 
 
 Button::Button(const sf::String& string)

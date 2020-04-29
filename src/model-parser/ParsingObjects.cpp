@@ -2,36 +2,21 @@
 
 #include "../button.hpp"
 #include "../linear_layout.hpp"
-#include "../view.hpp"
-#include "../layout.hpp"
 
 namespace succotash::xml {
 
-StringHashTable<ObjectFactory<View>> kViewFactories;
-StringHashTable<ObjectFactory<Layout>> kLayoutFactories;
+StringHashTable<ObjectFactory<View>> view_factories;
+StringHashTable<LayoutFactories> layout_factories;
 
-using Params = ObjectParams&;
+using Params = const StringHashTable<Convertible>&;
 
 void InitFactories() {
-  kViewFactories["View"] = [] (Params params) {
-    auto* view = new View();
-    if (params.find("id") != params.end()) {
-      view->SetId(params.at("id").as_int());
-    }
-    return view;
-  };
-  kViewFactories["Button"] = [] (Params params) {
-    auto sf_name = sf::String(params.at("name").value());
-    auto* view = new Button(sf_name);
-    if (params.find("id") != params.end()) {
-      view->SetId(params.at("id").as_int());
-    }
-    return view;
-  };
+  view_factories["View"]   = [] (Params params) { return View  ::Construct(params); };
+  view_factories["Button"] = [] (Params params) { return Button::Construct(params); };
 
-  kLayoutFactories["LinearLayout"] = [] (Params params) {
-    bool is_horizontal = std::string(params.at("orientation").value()) == "horizontal";
-    return new LinearLayout(is_horizontal ? LinearLayout::Type::Horizontal : LinearLayout::Type::Vertical);
+  layout_factories["LinearLayout"] = LayoutFactories {
+      [] (Params params) { return LinearLayout      ::Construct(params); },
+      [] (Params params) { return LinearLayoutParams::Construct(params); }
   };
 }
 

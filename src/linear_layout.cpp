@@ -1,11 +1,10 @@
 #include "linear_layout.hpp"
 #include "view.hpp"
-//#include "assert.hpp"
+#include "utilities/Convertible.hpp"
 
 inline int GetWeight(succotash::View* son) {
-  auto& plp = son->GetParentLayoutParams();
-  auto weight_it = plp.find("weight");
-  return weight_it != plp.end() ? atoi(weight_it->second.c_str()) : 1;
+  auto* params = dynamic_cast<const succotash::LinearLayoutParams*>(son->GetDispositionParams());
+  return params->weight;
 }
 
 int GetTotalWeight(std::vector<succotash::View*>& sons) {
@@ -54,6 +53,24 @@ void LinearLayout::Place(const succotash::View *parent_view) {
       new_pos.y += view_size.y;
     }
   }
+}
+
+LinearLayout* LinearLayout::Construct(const StringHashTable<Convertible>& params) {
+  bool is_horizontal = params.at("orientation") == "horizontal";
+  return new LinearLayout(is_horizontal ? LinearLayout::Type::Horizontal : LinearLayout::Type::Vertical);
+}
+
+LinearLayoutParams* LinearLayoutParams::Construct(const StringHashTable<Convertible>& xml_params,
+                                                  LinearLayoutParams* params) {
+  if (params == nullptr) {
+    params = new LinearLayoutParams();
+  }
+
+  // Weight
+  auto weight_it = xml_params.find("weight");
+  params->weight = (weight_it != xml_params.end()) ? weight_it->second.ToInt() : 1;
+
+  return params;
 }
 
 } // succotash

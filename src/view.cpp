@@ -4,7 +4,7 @@
 #include <utility>
 
 #include "layout.hpp"
-
+#include "utilities/Convertible.hpp"
 
 namespace succotash {
 
@@ -13,6 +13,20 @@ View::View()
       layout_(nullptr),
       parent_(nullptr),
       id_(0) {
+}
+
+//------------------------------------------------------------------------------
+// Public static.
+//------------------------------------------------------------------------------
+
+View* View::Construct(const utilities::StringHashTable<utilities::Convertible>& params, View* view) {
+  if (view == nullptr) {
+    view = new View();
+  }
+  if (params.find("id") != params.end()) {
+    view->SetId(params.at("id").ToInt());
+  }
+  return view;
 }
 
 //------------------------------------------------------------------------------
@@ -127,11 +141,11 @@ void View::InvokeLayout() const {
 void View::DrawSelf(sf::RenderWindow& display) const { /* Virtual */ }
 
 
-void View::SetParentLayoutParams(StringHashTable<std::string> parent_layout_params) {
-  parent_layout_params_ = std::move(parent_layout_params);
+void View::SetDispositionParams(LayoutParams* disposition_params) {
+  disposition_params_ = std::move(disposition_params);
 }
-const StringHashTable<std::string>& View::GetParentLayoutParams() const {
-  return parent_layout_params_;
+const LayoutParams* View::GetDispositionParams() const {
+  return disposition_params_;
 }
 
 View* View::FindViewById(int id) {

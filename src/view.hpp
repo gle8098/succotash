@@ -3,17 +3,26 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <StringHashTable.hpp>
 
+#include "utilities/StringHashTable.hpp"
+// TODO: remove above StringHashTable include when will be possible
 
 namespace succotash {
 
+// Dependencies
 class Layout;
+class LayoutParams;
+namespace utilities {
+  class Convertible;
+}
 
 class View {
 public:
+  static View* Construct(const utilities::StringHashTable<utilities::Convertible>& params, View* view = nullptr);
+
+public:
   View();
-  ~View() = default;
+  virtual ~View() = default;
 
   void Draw(sf::RenderWindow& display) const;
 
@@ -32,14 +41,14 @@ public:
   void SetId(int id); // Should not have external access (move to private). WRONG!!!!!!! MUST BE PUBLIC
   void SetLayout(Layout* layout);
 
-  void SetParentLayoutParams(StringHashTable<std::string> parent_layout_params);
+  void SetDispositionParams(LayoutParams* disposition_params);
 
   int                       GetId()     const;
   const Layout*             GetLayout() const;
   View*                     GetParent() const;
   const std::vector<View*>& GetSons()   const;
   sf::RectangleShape        GetShape()  const;
-  const StringHashTable<std::string>& GetParentLayoutParams() const;
+  const LayoutParams*       GetDispositionParams() const;
 
   View* FindViewById(int id);
 
@@ -58,7 +67,7 @@ private:
   View* parent_;
   std::vector<View*> sons_;
   int id_;
-  StringHashTable<std::string> parent_layout_params_;
+  LayoutParams* disposition_params_;
 };
 
 } // succotash

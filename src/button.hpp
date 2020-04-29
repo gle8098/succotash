@@ -11,6 +11,9 @@ namespace succotash {
 
 class Button : public View {
 public:
+  static Button* Construct(const utilities::StringHashTable<utilities::Convertible>& params, Button* view = nullptr);
+
+public:
   Button(const sf::String& string);
   Button(const sf::String& string, std::function<void(const Button*)> action);
   ~Button() = default;

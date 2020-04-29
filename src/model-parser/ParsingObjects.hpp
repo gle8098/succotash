@@ -1,27 +1,38 @@
 #ifndef SUCCOTASH_PARSINGOBJECTS_HPP
 #define SUCCOTASH_PARSINGOBJECTS_HPP
 
-#include <StringHashTable.hpp>
 #include <functional>
 #include <pugixml.hpp>
 
+#include "../utilities/Convertible.hpp"
+#include "../utilities/StringHashTable.hpp"
+
+// Objects which the parser recognizes
 namespace succotash {
+  class View;
+  class Layout;
+  class LayoutParams;
+} // namespace succotash
 
-class View;
-class Layout;
 
-namespace xml {
+namespace succotash::xml {
 
-using ObjectParams = const StringHashTable<pugi::xml_attribute>;
-template <typename T> using ObjectFactory = std::function<T*(ObjectParams&)>;
+using utilities::StringHashTable;
+using utilities::Convertible;
 
-extern StringHashTable<ObjectFactory<View>> kViewFactories;
-extern StringHashTable<ObjectFactory<Layout>> kLayoutFactories;
+template <typename T>
+using ObjectFactory = std::function< T* (const StringHashTable<Convertible>&) >;
+
+struct LayoutFactories {
+  ObjectFactory<Layout> layout_factory;
+  ObjectFactory<LayoutParams> params_factory;
+};
+
+extern StringHashTable<ObjectFactory<View>> view_factories;
+extern StringHashTable<LayoutFactories> layout_factories;
 
 void InitFactories();
 
-} // namespace xml
-
-} // namespace succotash
+} // namespace succotash::xml
 
 #endif  // SUCCOTASH_PARSINGOBJECTS_HPP

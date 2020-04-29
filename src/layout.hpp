@@ -7,7 +7,13 @@ namespace succotash {
 class View;
 
 struct Layout {
+  virtual ~Layout() = default;
+
   virtual void Place(const View* view_parent) = 0;
+};
+
+struct LayoutParams {
+  virtual ~LayoutParams() = default;
 };
 
 } // succotash
