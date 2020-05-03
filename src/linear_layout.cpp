@@ -2,8 +2,10 @@
 #include "view.hpp"
 #include "utilities/Convertible.hpp"
 
+
 inline int GetWeight(succotash::View* son) {
-  auto* params = dynamic_cast<const succotash::LinearLayoutParams*>(son->GetDispositionParams());
+  auto* params = dynamic_cast<const succotash::LinearLayoutParams*>(
+      son->GetDispositionParams());
   return params->weight;
 }
 
@@ -20,6 +22,12 @@ namespace succotash {
 
 LinearLayout::LinearLayout(Type orientation)
     : orientation_(orientation) {
+}
+
+LinearLayout::LinearLayout(const XmlParams& params) {
+  orientation_ = params.at("orientation") == "horizontal" ?
+    LinearLayout::Type::Horizontal :
+    LinearLayout::Type::Vertical;
 }
 
 void LinearLayout::Place(const succotash::View *parent_view) {
@@ -55,11 +63,6 @@ void LinearLayout::Place(const succotash::View *parent_view) {
   }
 }
 
-LinearLayout* LinearLayout::Construct(const StringHashTable<Convertible>& params) {
-  bool is_horizontal = params.at("orientation") == "horizontal";
-  return new LinearLayout(is_horizontal ? LinearLayout::Type::Horizontal : LinearLayout::Type::Vertical);
-}
-
 LayoutParams* LinearLayout::CreateDefaultParams() const {
   return new LinearLayoutParams;
 }
@@ -68,17 +71,9 @@ bool LinearLayout::AreParametersOfMyClass(const LayoutParams* params) const {
   return dynamic_cast<const LinearLayoutParams*>(params) != nullptr;
 }
 
-LinearLayoutParams* LinearLayoutParams::Construct(const StringHashTable<Convertible>& xml_params,
-                                                  LinearLayoutParams* params) {
-  if (params == nullptr) {
-    params = new LinearLayoutParams();
-  }
-
-  // Weight
-  auto weight_it = xml_params.find("weight");
-  params->weight = (weight_it != xml_params.end()) ? weight_it->second.ToInt() : 1;
-
-  return params;
+LinearLayoutParams::LinearLayoutParams(const XmlParams& params) {
+  auto weight_it = params.find("weight");
+  weight = weight_it != params.end() ?  weight_it->second.ToInt() : 1;
 }
 
 } // succotash

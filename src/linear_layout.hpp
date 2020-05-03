@@ -2,30 +2,21 @@
 #define SUCCOTASH_LINEAR_LAYOUT_HPP
 
 #include "layout.hpp"
-#include "utilities/StringHashTable.hpp"
-// TODO: remove above StringHashTable include when will be possible
 
 namespace succotash {
 
-// Dependencies
-namespace utilities {
-  class Convertible;
-}
-
-using utilities::Convertible;
-using utilities::StringHashTable;
 
 class LinearLayout : public Layout {
-public:
-  static LinearLayout* Construct(const StringHashTable<Convertible>& params);
-
 public:
   enum Type {
     Vertical,
     Horizontal,
   };
 
+public:
   LinearLayout(Type orientation);
+  LinearLayout(const XmlParams& xml_params);
+
   void Place(const View* parent_view) override;
   LayoutParams* CreateDefaultParams() const override;
   bool AreParametersOfMyClass(const LayoutParams* params) const override;
@@ -34,12 +25,14 @@ private:
   Type orientation_;
 };
 
+
 struct LinearLayoutParams : LayoutParams {
-  static LinearLayoutParams* Construct(const StringHashTable<Convertible>& xml_params,
-                                       LinearLayoutParams* params = nullptr);
+  LinearLayoutParams() = default;
+  LinearLayoutParams(const XmlParams& xml_params);
 
   int weight = 1;
 };
+
 
 } // succotash
 

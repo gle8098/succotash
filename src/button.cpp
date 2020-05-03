@@ -8,28 +8,32 @@
 
 namespace succotash {
 
-Button* Button::Construct(const utilities::StringHashTable<utilities::Convertible>& params, Button* view) {
-  if (view == nullptr) {
-    auto sf_name = sf::String(params.at("name").ToString());
-    view = new Button(sf_name);
-  }
-  View::Construct(params, view);
-  return view;
+Button::Button(const Params& params)
+    : View(params) {
+
+  Init(params.at("name").ToString());
 }
 
 
-Button::Button(const sf::String& string)
-    : text_(string, GetDefaultFont()) {
-  text_.setFillColor(sf::Color::Black);
-  shape_.setFillColor(sf::Color::White);
-  shape_.setOutlineColor(sf::Color::Red);
-  shape_.setOutlineThickness(3);
+Button::Button(const sf::String& string) {
+  Init(string);
 }
 
 Button::Button(const sf::String& string,
-               std::function<void(const Button*)> action)
-    : Button(string) {
-  action_ = std::move(action);
+               std::function<void(const Button*)> action) {
+  Init(string);
+  SetAction(action);
+}
+
+void Button::Init(const sf::String& string) {
+
+  text_.setString(string);
+  text_.setFont(GetDefaultFont());
+  text_.setFillColor(sf::Color::Black);
+
+  shape_.setFillColor(sf::Color::White);
+  shape_.setOutlineColor(sf::Color::Red);
+  shape_.setOutlineThickness(3);
 }
 
 void Button::DrawSelf(sf::RenderWindow& display) const {

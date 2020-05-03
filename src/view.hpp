@@ -16,12 +16,14 @@ namespace utilities {
   class Convertible;
 }
 
+
 class View {
-public:
-  static View* Construct(const utilities::StringHashTable<utilities::Convertible>& params, View* view = nullptr);
+protected:
+  using Params = utilities::StringHashTable<utilities::Convertible>;
 
 public:
   View();
+  View(const Params& params);
   virtual ~View() = default;
 
   void Draw(sf::RenderWindow& display) const;

@@ -11,12 +11,12 @@ StringHashTable<LayoutFactories> layout_factories;
 using Params = const StringHashTable<Convertible>&;
 
 void InitFactories() {
-  view_factories["View"]   = [] (Params params) { return View  ::Construct(params); };
-  view_factories["Button"] = [] (Params params) { return Button::Construct(params); };
+  view_factories["View"]   = [] (Params params) { return new View(params);    };
+  view_factories["Button"] = [] (Params params) { return new Button(params);  };
 
   layout_factories["LinearLayout"] = LayoutFactories {
-      [] (Params params) { return LinearLayout      ::Construct(params); },
-      [] (Params params) { return LinearLayoutParams::Construct(params); }
+      [] (Params params) { return new LinearLayout(params);       },
+      [] (Params params) { return new LinearLayoutParams(params); }
   };
 }
 

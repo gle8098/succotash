@@ -11,11 +11,9 @@ namespace succotash {
 
 class Button : public View {
 public:
-  static Button* Construct(const utilities::StringHashTable<utilities::Convertible>& params, Button* view = nullptr);
-
-public:
   Button(const sf::String& string);
   Button(const sf::String& string, std::function<void(const Button*)> action);
+  Button(const Params& params);
   ~Button() = default;
 
   const sf::String& GetText() const;
@@ -28,6 +26,10 @@ private:
 
   void MoveTo(const sf::Vector2f& new_pos)  override;
   void Resize(const sf::Vector2f& new_size) override;
+
+  // Used to solve a problem of base initializer and a delegation in
+  // Button(const Params& params);
+  void Init(const sf::String& string);
 
 private:
   sf::Text text_;

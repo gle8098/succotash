@@ -15,18 +15,10 @@ View::View()
       id_(0) {
 }
 
-//------------------------------------------------------------------------------
-// Public static.
-//------------------------------------------------------------------------------
-
-View* View::Construct(const utilities::StringHashTable<utilities::Convertible>& params, View* view) {
-  if (view == nullptr) {
-    view = new View();
-  }
+View::View(const Params& params) {
   if (params.find("id") != params.end()) {
-    view->SetId(params.at("id").ToInt());
+    SetId(params.at("id").ToInt());
   }
-  return view;
 }
 
 //------------------------------------------------------------------------------
