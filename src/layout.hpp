@@ -1,6 +1,7 @@
 #ifndef SUCCOTASH_LAYOUT_HPP
 #define SUCCOTASH_LAYOUT_HPP
 
+#include <vector>
 #include "utilities/StringHashTable.hpp"
 #include "utilities/Convertible.hpp"
 // TODO: remove above include when will be possible
@@ -22,7 +23,7 @@ protected:
 public:
   virtual ~Layout() = default;
 
-  virtual void Place(std::vector<View*>& views,
+  virtual void Place(const std::vector<View*>& views,
                      const sf::RectangleShape& area) = 0;
 
   virtual LayoutParams* CreateDefaultParams() const = 0;

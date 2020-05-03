@@ -1,7 +1,11 @@
 #include "linear_layout.hpp"
-#include "view.hpp"
-#include "utilities/Convertible.hpp"
 
+
+namespace succotash {
+
+//------------------------------------------------------------------------------
+// Local functions.
+//------------------------------------------------------------------------------
 
 inline int GetWeight(succotash::View* son) {
   auto* params = dynamic_cast<const succotash::LinearLayoutParams*>(
@@ -9,7 +13,7 @@ inline int GetWeight(succotash::View* son) {
   return params->weight;
 }
 
-int GetTotalWeight(std::vector<succotash::View*>& sons) {
+int GetTotalWeight(const std::vector<succotash::View*>& sons) {
   int total_weight = 0;
   for (auto son : sons) {
     total_weight += GetWeight(son);
@@ -17,8 +21,9 @@ int GetTotalWeight(std::vector<succotash::View*>& sons) {
   return total_weight;
 }
 
-
-namespace succotash {
+//------------------------------------------------------------------------------
+// Ctors.
+//------------------------------------------------------------------------------
 
 LinearLayout::LinearLayout(Type orientation)
     : orientation_(orientation) {
@@ -30,7 +35,11 @@ LinearLayout::LinearLayout(const XmlParams& params) {
     LinearLayout::Type::Vertical;
 }
 
-void LinearLayout::Place(std::vector<View*>& views,
+//------------------------------------------------------------------------------
+// Methods.
+//------------------------------------------------------------------------------
+
+void LinearLayout::Place(const std::vector<View*>& views,
                          const sf::RectangleShape& area) {
 
   int total_weight = GetTotalWeight(views);

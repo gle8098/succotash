@@ -2,10 +2,14 @@
 #include "button.hpp"
 #include "font_manager.hpp"
 #include "linear_layout.hpp"
-#include <iostream>
 #include "model-parser/ParsingObjects.hpp"
 
+
+#include <iostream>
+
+
 using namespace succotash;
+
 
 int main0() {
   LoadDefaultFont("font/Arial.ttf");

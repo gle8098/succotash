@@ -19,8 +19,6 @@ public:
   void SetAction(std::function<void(const Button*)> action);
   const sf::String& GetText() const;
 
-  void SetAction(std::function<void(const Button*)> action);
-
 private:
   void DrawSelf(sf::RenderWindow& window) const override;
   void OnClickEvent(View* clicked_view)         override;

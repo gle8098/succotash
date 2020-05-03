@@ -4,7 +4,6 @@
 #include <utility>
 
 #include "layout.hpp"
-#include "utilities/Convertible.hpp"
 
 namespace succotash {
 

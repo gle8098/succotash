@@ -8,12 +8,15 @@
 
 namespace succotash {
 
+//------------------------------------------------------------------------------
+// Ctors.
+//------------------------------------------------------------------------------
+
 Button::Button(const Params& params)
     : View(params) {
 
   Init(params.at("name").ToString());
 }
-
 
 Button::Button(const sf::String& string) {
   Init(string);
@@ -25,6 +28,10 @@ Button::Button(const sf::String& string,
   SetAction(action);
 }
 
+//------------------------------------------------------------------------------
+// Methods.
+//------------------------------------------------------------------------------
+
 void Button::Init(const sf::String& string) {
   text_.setString(string);
   text_.setFont(GetDefaultFont());
@@ -33,13 +40,6 @@ void Button::Init(const sf::String& string) {
   shape_.setFillColor(sf::Color::White);
   shape_.setOutlineColor(sf::Color::Red);
   shape_.setOutlineThickness(3);
-}
-
-Button::Button(const sf::String& string,
-               std::function<void(const Button*)> action)
-    : Button(string) {
-
-  SetAction(action);
 }
 
 void Button::SetAction(std::function<void(const Button*)> action) {
@@ -69,10 +69,6 @@ void Button::MoveTo(const sf::Vector2f& new_pos) {
 void Button::Resize(const sf::Vector2f& new_size) {
   View::Resize(new_size);
   //text_.setSize(shape_.getSize());
-}
-
-void Button::SetAction(std::function<void(const Button*)> action) {
-  action_ = std::move(action);
 }
 
 } // succotash
