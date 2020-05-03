@@ -3,7 +3,6 @@
 
 #include "view.hpp"
 
-
 namespace succotash {
 
 class Editor {

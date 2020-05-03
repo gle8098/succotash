@@ -1,6 +1,5 @@
 #include "linear_layout.hpp"
 
-
 namespace succotash {
 
 //------------------------------------------------------------------------------
@@ -41,7 +40,6 @@ LinearLayout::LinearLayout(const XmlParams& params) {
 
 void LinearLayout::Place(const std::vector<View*>& views,
                          const sf::RectangleShape& area) {
-
   int total_weight = GetTotalWeight(views);
 
   auto area_pos  = area.getPosition();

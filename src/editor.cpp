@@ -6,7 +6,6 @@ namespace succotash {
 
 Editor::Editor()
     : display_(sf::VideoMode(800, 600), "Succotash") {
-
   display_.setFramerateLimit(50);
 
   master_view_.MoveTo(sf::Vector2f(0, 0));
@@ -14,7 +13,6 @@ Editor::Editor()
 }
 
 void Editor::Run() {
-
   while (display_.isOpen()) {
     sf::Event event;
 
@@ -50,4 +48,3 @@ const View& Editor::GetMasterView() const { return master_view_; }
 View&       Editor::GetMasterView()       { return master_view_; }
 
 }  // succotash
-

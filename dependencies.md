@@ -6,3 +6,7 @@
 1. SFML (>= 2.4) \
    Потребуются модули `sfml-graphics`, `sfml-window`, `sfml-system`.
 2. PugiXML (>= 1.10)
+
+На Debian (Ubuntu) все зависимости устанавливаются командой
+
+    sudo apt install libsfml-dev libpugixml-dev

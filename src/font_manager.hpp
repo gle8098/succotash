@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 
-
 void LoadDefaultFont(const std::string& file);
 const sf::Font& GetDefaultFont();
 

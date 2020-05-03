@@ -1,21 +1,18 @@
 #include "Convertible.hpp"
 
-#include <cstring>
 #include <functional>
 #include <stdexcept>
 
 namespace succotash::utilities {
 
-// Private methods
+//------------------------------------------------------------------------------
+// Local functions which are not for export
+//------------------------------------------------------------------------------
 
 inline void ThrowErrorImpl(const char* value, const char* desc) {
   char buffer[1024];
   snprintf(buffer, sizeof(buffer), "Value '%s' exception, %s", value, desc);
   throw std::runtime_error(buffer);
-}
-
-void Convertible::ThrowError(const char* desc) const {
-  ThrowErrorImpl(this->value_, desc);
 }
 
 template <typename T, typename Func>
@@ -30,15 +27,29 @@ inline T ConvertStdlib(const char* value, Func func, const char* error_desc) {
   return result;
 }
 
+//------------------------------------------------------------------------------
+// Private methods
+//------------------------------------------------------------------------------
+
+void Convertible::ThrowError(const char* desc) const {
+  ThrowErrorImpl(this->value_, desc);
+}
+
+//------------------------------------------------------------------------------
 // Public methods
+//------------------------------------------------------------------------------
 
 Convertible::Convertible(const char* value)
  : value_(value) {
 }
 
+// String
+
 std::string Convertible::ToString() const {
   return std::string(value_);
 }
+
+// Basic numbers
 
 int Convertible::ToInt() const {
   return ToLong();
@@ -49,27 +60,45 @@ unsigned int Convertible::ToUInt() const {
 }
 
 long Convertible::ToLong() const {
-  return ConvertStdlib<long>(value_,
-                             std::bind(&strtol, std::placeholders::_1, std::placeholders::_2, 0),
-                             "couldn't convert to int/long");
+  auto parser = std::bind(&strtol, std::placeholders::_1,
+                          std::placeholders::_2, 0);
+  return ConvertStdlib<long>(value_, parser,"couldn't convert to int/long");
 }
 
 unsigned long Convertible::ToULong() const {
-  return ConvertStdlib<unsigned long>(value_,
-                                      std::bind(&strtoul, std::placeholders::_1, std::placeholders::_2, 0),
+  auto parser = std::bind(&strtoul, std::placeholders::_1,
+                          std::placeholders::_2, 0);
+  return ConvertStdlib<unsigned long>(value_, parser,
                                       "couldn't convert to uint/ulong");
 }
 
+// Numbers with floating precision
+
+float Convertible::ToFloat() const {
+  auto parser = &strtof;
+  return ConvertStdlib<float>(value_, parser, "couldn't convert to float");
+}
+
+double Convertible::ToDouble() const {
+  auto parser = &strtod;
+  return ConvertStdlib<double>(value_, parser, "couldn't convert to double");
+}
+
+// Bool
+
 bool Convertible::ToBool() const {
-  if (strcmp(value_, "true") == 0 || strcmp(value_, "True") == 0) {
+  std::string_view value(value_);
+  if (value == "true" || value == "True") {
     return true;
-  } else if (strcmp(value_, "false") == 0 || strcmp(value_, "False") == 0) {
+  } else if (value == "false" || value == "False") {
     return false;
   } else {
     ThrowError("couldn't convert to bool");
     return false;
   }
 }
+
+// Operators
 
 bool Convertible::operator==(const std::string& rhs) const {
   return rhs == value_;

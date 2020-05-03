@@ -3,20 +3,20 @@
 
 #include <cassert>
 
-#define ERROR   0
-#define WARNING 1
+#define ERROR_LEVEL   0
+#define WARNING_LEVEL 1
 
-#define ASSERT_LEVEL WARNING
+#define ASSERT_LEVEL WARNING_LEVEL
 
-#if ASSERT_LEVEL == ERROR
+#if ASSERT_LEVEL == ERROR_LEVEL
 #define ASSERT(statement) assert(statement)
-#elif ASSERT_LEVEL == WARNING
+#elif ASSERT_LEVEL == WARNING_LEVEL
 #define ASSERT(statement) ASSERT_WARN(statement)
 #else
 #define ASSERT(statement) // Do nothing
 #endif  // ASSERT_LEVEL
 
-#define ASSERT_WARN(                                                  \
+#define ASSERT_WARN(statement)                                        \
   if (!(statement)) {                                                 \
     fprintf(stderr, "WARNING: %s : %s : %d assertion `%s` failed.\n", \
             __FILE__, __func__, __LINE__, #statement);                \
@@ -27,4 +27,3 @@
             __FILE__, __func__, __LINE__, message);
 
 #endif // ASSERT_HPP
-

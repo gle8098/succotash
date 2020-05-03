@@ -1,12 +1,10 @@
 # succotash
-A photo editing tool based on SFML library. A more detailed description will be provided as
-the tool develops.
+Инструмент для редактирования фотографий на основе библиотеки SFML. Более подробное
+описание будет написано по мере развития инструмента.
 
-### Dependencies
-In order to compile & run succotash libraries must be installed:
+### Зависимости
+Зависимости описаны в [dependencies.md](dependencies.md)
 
-#### SFML
-For _Linux_ it is preffered to install sfml from package repository. On Ubuntu simply execute
-the following command
+### Лицензия
 
-    sudo apt install libsfml-dev
+[MIT License](LICENSE)

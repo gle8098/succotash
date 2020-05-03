@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS_DEBUG   "${CMAKE_CXX_FLAGS_DEBUG}   -Wall -O0 -g")
 
 include_directories(libs/string_hash_table)
 
-file(GLOB_RECURSE SUCCOTASH_SOURCE src/*.cpp)
+file(GLOB_RECURSE SUCCOTASH_SOURCE src/*)
 
 # set(SCRIPTS_DIR ${CMAKE_SOURCE_DIR}/build-scripts)
 # set(SUCCOTASH_GENERATED_SOURCE)
