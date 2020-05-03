@@ -17,7 +17,8 @@ public:
   LinearLayout(Type orientation);
   LinearLayout(const XmlParams& xml_params);
 
-  void Place(const View* parent_view) override;
+  void Place(std::vector<View*>& views,
+             const sf::RectangleShape& area) override;
   LayoutParams* CreateDefaultParams() const override;
   bool AreParametersOfMyClass(const LayoutParams* params) const override;
 

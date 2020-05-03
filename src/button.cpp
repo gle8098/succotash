@@ -26,7 +26,6 @@ Button::Button(const sf::String& string,
 }
 
 void Button::Init(const sf::String& string) {
-
   text_.setString(string);
   text_.setFont(GetDefaultFont());
   text_.setFillColor(sf::Color::Black);
@@ -34,6 +33,17 @@ void Button::Init(const sf::String& string) {
   shape_.setFillColor(sf::Color::White);
   shape_.setOutlineColor(sf::Color::Red);
   shape_.setOutlineThickness(3);
+}
+
+Button::Button(const sf::String& string,
+               std::function<void(const Button*)> action)
+    : Button(string) {
+
+  SetAction(action);
+}
+
+void Button::SetAction(std::function<void(const Button*)> action) {
+  action_ = std::move(action);
 }
 
 void Button::DrawSelf(sf::RenderWindow& display) const {

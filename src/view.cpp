@@ -85,29 +85,33 @@ void View::OnClickEvent(View* clicked_view) { /* Virtual */ }
 
 void View::MoveTo(const sf::Vector2f& new_pos) {
   auto offset = shape_.getPosition() - new_pos;
+
+  shape_.setPosition(new_pos);
   for (View* son : sons_) {
     son->MoveBy(offset);
   }
-  shape_.setPosition(new_pos);
 }
 
 void View::MoveBy(const sf::Vector2f& offset) {
+  shape_.move(offset);
   for (View* son : sons_) {
     son->MoveBy(offset);
   }
-  shape_.move(offset);
 }
 
 void View::Resize(const sf::Vector2f& new_size) {
+  // Should it recursively Resize sons in case layout_ == nullptr?
   shape_.setSize(new_size);
+  InvokeLayout(); // Layout will align sons.
 }
 
 //------------------------------------------------------------------------------
 // Set & Get.
 //------------------------------------------------------------------------------
 
-int View::GetId() const { return id_; }
-void View::SetId(int id) { id_ = id; }
+void View::SetId(int id) {
+  id_ = id;
+}
 
 void View::SetLayout(Layout* layout) {
   layout_ = layout;
@@ -117,6 +121,7 @@ void View::SetLayout(Layout* layout) {
   InvokeLayout();
 }
 
+int                       View::GetId()     const { return id_;     }
 const Layout*             View::GetLayout() const { return layout_; }
 View*                     View::GetParent() const { return parent_; }
 const std::vector<View*>& View::GetSons()   const { return sons_;   }
@@ -128,8 +133,7 @@ sf::RectangleShape        View::GetShape()  const { return shape_;  }
 
 void View::InvokeLayout() const {
   if (layout_) {
-    // 'This' is a parent of its sons, so Place arg is correct.
-    layout_->Place(this);
+    layout_->Place(sons_, shape_);
   }
   for (View* son : sons_) {
     son->InvokeLayout();

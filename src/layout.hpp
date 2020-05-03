@@ -1,5 +1,5 @@
-#ifndef SUCCOTASH_GRID_LAYOUT_HPP
-#define SUCCOTASH_GRID_LAYOUT_HPP
+#ifndef SUCCOTASH_LAYOUT_HPP
+#define SUCCOTASH_LAYOUT_HPP
 
 #include "utilities/StringHashTable.hpp"
 #include "utilities/Convertible.hpp"
@@ -22,7 +22,8 @@ protected:
 public:
   virtual ~Layout() = default;
 
-  virtual void Place(const View* view_parent) = 0;
+  virtual void Place(std::vector<View*>& views,
+                     const sf::RectangleShape& area) = 0;
 
   virtual LayoutParams* CreateDefaultParams() const = 0;
   virtual bool AreParametersOfMyClass(const LayoutParams* params) const = 0;
@@ -30,4 +31,4 @@ public:
 
 } // succotash
 
-#endif // SUCCOTASH_GRID_LAYOUT_HPP
+#endif // SUCCOTASH_LAYOUT_HPP

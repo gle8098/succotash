@@ -16,6 +16,7 @@ public:
   Button(const Params& params);
   ~Button() = default;
 
+  void SetAction(std::function<void(const Button*)> action);
   const sf::String& GetText() const;
 
   void SetAction(std::function<void(const Button*)> action);

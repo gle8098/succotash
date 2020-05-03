@@ -30,12 +30,13 @@ LinearLayout::LinearLayout(const XmlParams& params) {
     LinearLayout::Type::Vertical;
 }
 
-void LinearLayout::Place(const succotash::View *parent_view) {
-  auto views = parent_view->GetSons();
+void LinearLayout::Place(std::vector<View*>& views,
+                         const sf::RectangleShape& area) {
+
   int total_weight = GetTotalWeight(views);
 
-  auto area_pos  = parent_view->GetShape().getPosition();
-  auto area_size = parent_view->GetShape().getSize();
+  auto area_pos  = area.getPosition();
+  auto area_size = area.getSize();
 
   size_t views_cnt = views.size();
   sf::Vector2f new_pos(area_pos.x, area_pos.y);
