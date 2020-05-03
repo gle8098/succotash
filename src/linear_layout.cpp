@@ -60,6 +60,14 @@ LinearLayout* LinearLayout::Construct(const StringHashTable<Convertible>& params
   return new LinearLayout(is_horizontal ? LinearLayout::Type::Horizontal : LinearLayout::Type::Vertical);
 }
 
+LayoutParams* LinearLayout::CreateDefaultParams() const {
+  return new LinearLayoutParams;
+}
+
+bool LinearLayout::AreParametersOfMyClass(const LayoutParams* params) const {
+  return dynamic_cast<const LinearLayoutParams*>(params) != nullptr;
+}
+
 LinearLayoutParams* LinearLayoutParams::Construct(const StringHashTable<Convertible>& xml_params,
                                                   LinearLayoutParams* params) {
   if (params == nullptr) {

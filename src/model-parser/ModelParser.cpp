@@ -5,9 +5,7 @@
 #include <fstream>
 #include <pugixml.hpp>
 
-#include "../utilities/StringHashTable.hpp"
 #include "ParsingObjects.hpp"
-#include "../utilities/Convertible.hpp"
 
 namespace succotash::xml {
 
@@ -44,17 +42,18 @@ struct Parser {
   }
 
  private:
-  View* ParseModelRecursive(const pugi::xml_node& tag) {
+  View* ParseModelRecursive(const pugi::xml_node& tag, const ObjectFactory<LayoutParams>* params_factory = nullptr) {
     auto view_fact_it = view_factories.find(tag.name());
     if (view_fact_it == view_factories.end()) {
       ThrowParseException(tag.offset_debug(), "View class was not found");
     }
-    ObjectFactory<View> view_factory = view_fact_it->second;
+    ObjectFactory<View>& view_factory = view_fact_it->second;
 
     StringHashTable<Convertible> view_params;
     StringHashTable<Convertible> layout_params;
     StringHashTable<Convertible> parent_params;
-    LayoutFactories* my_layout_factories = nullptr;
+    ObjectFactory<Layout> layout_factory = nullptr;
+    ObjectFactory<LayoutParams> my_params_factory = nullptr;
 
     for (auto attr : tag.attributes()) {
       std::string name = attr.name();
@@ -68,7 +67,9 @@ struct Parser {
         if (layout_fact_it == layout_factories.end()) {
           ThrowParseException(tag.offset_debug(), "Layout class was not found");
         }
-        my_layout_factories = &layout_fact_it->second;
+        auto factories = layout_fact_it->second;
+        layout_factory = factories.layout_factory;
+        my_params_factory = factories.params_factory;
 
       } else if (name.rfind("parent:", 0) == 0) {
         std::string key = name.substr(strlen("parent:"));
@@ -89,8 +90,8 @@ struct Parser {
 
     try {
       view = view_factory(view_params);
-      layout = my_layout_factories ? my_layout_factories->layout_factory(layout_params) : nullptr;
-      params = my_layout_factories ? my_layout_factories->params_factory(parent_params) : nullptr;
+      layout = layout_factory ? ( layout_factory)(layout_params) : nullptr;
+      params = params_factory ? (*params_factory)(parent_params) : nullptr;
     } catch (std::exception& ex) {
       ThrowParseException(tag.offset_debug(), ex.what());
     }
@@ -99,7 +100,7 @@ struct Parser {
     view->SetDispositionParams(params);
 
     for (auto child : tag.children()) {
-      View* son = ParseModelRecursive(child);
+      View* son = ParseModelRecursive(child, &my_params_factory);
       view->AddSon(son);
     }
 

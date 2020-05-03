@@ -19,7 +19,7 @@ Button* Button::Construct(const utilities::StringHashTable<utilities::Convertibl
 
 
 Button::Button(const sf::String& string)
- : text_(string, GetDefaultFont()) {
+    : text_(string, GetDefaultFont()) {
   text_.setFillColor(sf::Color::Black);
   shape_.setFillColor(sf::Color::White);
   shape_.setOutlineColor(sf::Color::Red);

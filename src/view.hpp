@@ -38,7 +38,7 @@ public:
   virtual void MoveBy(const sf::Vector2f& offset);
   virtual void Resize(const sf::Vector2f& new_size);
 
-  void SetId(int id); // Should not have external access (move to private). WRONG!!!!!!! MUST BE PUBLIC
+  void SetId(int id);
   void SetLayout(Layout* layout);
 
   void SetDispositionParams(LayoutParams* disposition_params);
@@ -53,6 +53,7 @@ public:
   View* FindViewById(int id);
 
 protected:
+  void UpdateLayoutParams(View* son) const;
   void InvokeLayout() const;
 
   virtual void DrawSelf(sf::RenderWindow& display) const;

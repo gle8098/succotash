@@ -47,6 +47,7 @@ void View::Draw(sf::RenderWindow &display) const {
 void View::AddSon(View* view) {
   sons_.push_back(view);
   view->parent_ = view;
+  UpdateLayoutParams(view);
   InvokeLayout();
 }
 
@@ -54,6 +55,7 @@ void View::InsertSonBefore(std::vector<View*>::const_iterator position,
                            View* view) {
   sons_.insert(position, view);
   view->parent_ = view;
+  UpdateLayoutParams(view);
   InvokeLayout();
 }
 
@@ -62,6 +64,7 @@ bool View::RemoveSon(View* view) {
   if (it != sons_.end()) {
     sons_.erase(it);
     view->parent_ = nullptr;
+    UpdateLayoutParams(view);
     InvokeLayout();
     return true;
   }
@@ -116,6 +119,9 @@ void View::SetId(int id) { id_ = id; }
 
 void View::SetLayout(Layout* layout) {
   layout_ = layout;
+  for (auto& son : sons_) {
+    UpdateLayoutParams(son);
+  }
   InvokeLayout();
 }
 
@@ -159,6 +165,16 @@ View* View::FindViewById(int id) {
     }
   }
   return nullptr;
+}
+
+void View::UpdateLayoutParams(View* son) const {
+  if (layout_ == nullptr) {
+    return;
+  }
+  if (!layout_->AreParametersOfMyClass(son->GetDispositionParams())) {
+    // TODO: memory leak
+    son->SetDispositionParams(layout_->CreateDefaultParams());
+  }
 }
 
 } // succotash

@@ -27,6 +27,8 @@ public:
 
   LinearLayout(Type orientation);
   void Place(const View* parent_view) override;
+  LayoutParams* CreateDefaultParams() const override;
+  bool AreParametersOfMyClass(const LayoutParams* params) const override;
 
 private:
   Type orientation_;
@@ -36,7 +38,7 @@ struct LinearLayoutParams : LayoutParams {
   static LinearLayoutParams* Construct(const StringHashTable<Convertible>& xml_params,
                                        LinearLayoutParams* params = nullptr);
 
-  int weight;
+  int weight = 1;
 };
 
 } // succotash
