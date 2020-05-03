@@ -1,9 +1,10 @@
 #include "view.hpp"
 
 #include <algorithm>
+#include <utility>
 
 #include "layout.hpp"
-
+#include "utilities/Convertible.hpp"
 
 namespace succotash {
 
@@ -12,6 +13,12 @@ View::View()
       layout_(nullptr),
       parent_(nullptr),
       id_(0) {
+}
+
+View::View(const Params& params) {
+  if (params.find("id") != params.end()) {
+    SetId(params.at("id").ToInt());
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -32,6 +39,7 @@ void View::Draw(sf::RenderWindow &display) const {
 void View::AddSon(View* view) {
   sons_.push_back(view);
   view->parent_ = view;
+  UpdateLayoutParams(view);
   InvokeLayout();
 }
 
@@ -39,6 +47,7 @@ void View::InsertSonBefore(std::vector<View*>::const_iterator position,
                            View* view) {
   sons_.insert(position, view);
   view->parent_ = view;
+  UpdateLayoutParams(view);
   InvokeLayout();
 }
 
@@ -47,6 +56,7 @@ bool View::RemoveSon(View* view) {
   if (it != sons_.end()) {
     sons_.erase(it);
     view->parent_ = nullptr;
+    UpdateLayoutParams(view);
     InvokeLayout();
     return true;
   }
@@ -105,6 +115,9 @@ void View::SetId(int id) {
 
 void View::SetLayout(Layout* layout) {
   layout_ = layout;
+  for (auto& son : sons_) {
+    UpdateLayoutParams(son);
+  }
   InvokeLayout();
 }
 
@@ -118,9 +131,8 @@ sf::RectangleShape        View::GetShape()  const { return shape_;  }
 // Protected.
 //------------------------------------------------------------------------------
 
-void View::InvokeLayout() {
+void View::InvokeLayout() const {
   if (layout_) {
-    // 'This' is a parent of its sons, so Place arg is correct.
     layout_->Place(sons_, shape_);
   }
   for (View* son : sons_) {
@@ -129,6 +141,37 @@ void View::InvokeLayout() {
 }
 
 void View::DrawSelf(sf::RenderWindow& display) const { /* Virtual */ }
+
+
+void View::SetDispositionParams(LayoutParams* disposition_params) {
+  disposition_params_ = std::move(disposition_params);
+}
+const LayoutParams* View::GetDispositionParams() const {
+  return disposition_params_;
+}
+
+View* View::FindViewById(int id) {
+  if (id_ == id) {
+    return this;
+  }
+  for (auto son : sons_) {
+    View* needle = son->FindViewById(id);
+    if (needle != nullptr) {
+      return needle;
+    }
+  }
+  return nullptr;
+}
+
+void View::UpdateLayoutParams(View* son) const {
+  if (layout_ == nullptr) {
+    return;
+  }
+  if (!layout_->AreParametersOfMyClass(son->GetDispositionParams())) {
+    // TODO: memory leak
+    son->SetDispositionParams(layout_->CreateDefaultParams());
+  }
+}
 
 } // succotash
 

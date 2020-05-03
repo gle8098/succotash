@@ -2,9 +2,9 @@
 #define SUCCOTASH_LINEAR_LAYOUT_HPP
 
 #include "layout.hpp"
-#include <vector>
 
 namespace succotash {
+
 
 class LinearLayout : public Layout {
 public:
@@ -13,17 +13,27 @@ public:
     Horizontal,
   };
 
+public:
   LinearLayout(Type orientation);
+  LinearLayout(const XmlParams& xml_params);
 
-  void SetWeights(std::vector<int>&  weights);
-  void SetWeights(std::vector<int>&& weights);
   void Place(std::vector<View*>& views,
              const sf::RectangleShape& area) override;
+  LayoutParams* CreateDefaultParams() const override;
+  bool AreParametersOfMyClass(const LayoutParams* params) const override;
 
 private:
   Type orientation_;
-  std::vector<int> weights_;
 };
+
+
+struct LinearLayoutParams : LayoutParams {
+  LinearLayoutParams() = default;
+  LinearLayoutParams(const XmlParams& xml_params);
+
+  int weight = 1;
+};
+
 
 } // succotash
 

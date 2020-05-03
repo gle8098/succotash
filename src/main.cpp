@@ -3,11 +3,13 @@
 #include "font_manager.hpp"
 #include "linear_layout.hpp"
 #include <iostream>
+#include "model-parser/ParsingObjects.hpp"
 
 using namespace succotash;
 
-int main() {
-  LoadDefaultFont("Arial.ttf");
+int main0() {
+  LoadDefaultFont("font/Arial.ttf");
+  xml::InitFactories();
 
   Editor editor;
 
@@ -33,8 +35,8 @@ int main() {
   }
 
   LinearLayout layout1(LinearLayout::Type::Vertical);
-  layout1.SetWeights({4, 2, 3});
-  button_context->SetLayout(&layout1);
+  // layout1.SetWeights({4, 2, 3});
+  buttons->SetLayout(&layout1);
 
   master_view.AddSon(button_context);
 

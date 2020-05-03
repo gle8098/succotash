@@ -1,0 +1,15 @@
+<View layout="RelativeLayout" xmlns:layout="layout" xmlns:parent="parent">
+    <View layout="LinearLayout" layout:orientation="horizontal" parent:link="left-upper">
+        <Button name="File" />
+        <Button name="Edit" />
+        <Button name="Help" />
+    </View>
+    <View layout="LinearLayout" layout:orientation="vertical">
+        <Pane layout="GridLayour" name="Basic Instruments" >
+            <Button name="Button1" />
+            <Button name="Button2" />
+            <Button name="Button3" />
+            <Button name="Button4" />
+        </Pane>
+    </View>
+</View>

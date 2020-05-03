@@ -37,3 +37,8 @@ cmake-build-debug
 
 # Vim files
 *.swp
+
+# Generated files
+gen-src/
+
+venv/

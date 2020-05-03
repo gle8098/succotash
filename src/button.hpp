@@ -13,10 +13,13 @@ class Button : public View {
 public:
   Button(const sf::String& string);
   Button(const sf::String& string, std::function<void(const Button*)> action);
+  Button(const Params& params);
   ~Button() = default;
 
   void SetAction(std::function<void(const Button*)> action);
   const sf::String& GetText() const;
+
+  void SetAction(std::function<void(const Button*)> action);
 
 private:
   void DrawSelf(sf::RenderWindow& window) const override;
@@ -24,6 +27,10 @@ private:
 
   void MoveTo(const sf::Vector2f& new_pos)  override;
   void Resize(const sf::Vector2f& new_size) override;
+
+  // Used to solve a problem of base initializer and a delegation in
+  // Button(const Params& params);
+  void Init(const sf::String& string);
 
 private:
   sf::Text text_;

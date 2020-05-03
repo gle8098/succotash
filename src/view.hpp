@@ -4,15 +4,27 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+#include "utilities/StringHashTable.hpp"
+// TODO: remove above StringHashTable include when will be possible
 
 namespace succotash {
 
+// Dependencies
 class Layout;
+class LayoutParams;
+namespace utilities {
+  class Convertible;
+}
+
 
 class View {
+protected:
+  using Params = utilities::StringHashTable<utilities::Convertible>;
+
 public:
   View();
-  ~View() = default;
+  View(const Params& params);
+  virtual ~View() = default;
 
   void Draw(sf::RenderWindow& display) const;
 
@@ -28,17 +40,23 @@ public:
   virtual void MoveBy(const sf::Vector2f& offset);
   virtual void Resize(const sf::Vector2f& new_size);
 
-  void SetId(int id); // Should not have external access (move to private).
+  void SetId(int id);
   void SetLayout(Layout* layout);
+
+  void SetDispositionParams(LayoutParams* disposition_params);
 
   int                       GetId()     const;
   const Layout*             GetLayout() const;
   View*                     GetParent() const;
   const std::vector<View*>& GetSons()   const;
   sf::RectangleShape        GetShape()  const;
+  const LayoutParams*       GetDispositionParams() const;
+
+  View* FindViewById(int id);
 
 protected:
-  void InvokeLayout();  // Not const.
+  void UpdateLayoutParams(View* son) const;
+  void InvokeLayout() const;
 
   virtual void DrawSelf(sf::RenderWindow& display) const;
 
@@ -52,6 +70,7 @@ private:
   View* parent_;
   std::vector<View*> sons_;
   int id_;
+  LayoutParams* disposition_params_;
 };
 
 } // succotash
