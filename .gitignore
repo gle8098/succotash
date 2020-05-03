@@ -35,6 +35,11 @@
 .idea
 cmake-build-debug
 
+# CMake
+CMakeFiles
+CMakeCache.txt
+Makefile
+
 # Vim files
 *.swp
 
