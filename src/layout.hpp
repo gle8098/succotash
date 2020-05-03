@@ -1,8 +1,11 @@
 #ifndef SUCCOTASH_LAYOUT_HPP
 #define SUCCOTASH_LAYOUT_HPP
 
-#include "utilities/StringHashTable.hpp"
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <vector>
+
 #include "utilities/Convertible.hpp"
+#include "utilities/StringHashTable.hpp"
 // TODO: remove above include when will be possible
 
 namespace succotash {
