@@ -1,12 +1,12 @@
 ![Succotash](media/Succotash.jpg)
 
 # succotash
-Инструмент для редактирования фотографий на основе библиотеки SFML. Более подробное
-описание будет написано по мере развития инструмента.
+A photo editing tool based on SFML library. A more detailed description will be provided as
+the tool develops.
 
-### Зависимости
-Зависимости описаны в [dependencies.md](dependencies.md)
+### Dependencies
+Dependencies are described in [dependencies.md](dependencies.md)
 
-### Лицензия
+### License
 
 [MIT License](LICENSE)
