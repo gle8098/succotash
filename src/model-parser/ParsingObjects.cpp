@@ -11,12 +11,16 @@ StringHashTable<LayoutFactories> layout_factories;
 using Params = const StringHashTable<Convertible>&;
 
 void InitFactories() {
-  view_factories["View"]   = [] (Params params) { return new View(params);    };
-  view_factories["Button"] = [] (Params params) { return new Button(params);  };
+  view_factories["View"]   = [] (Params params) {
+    return std::make_shared<View>(params);
+  };
+  view_factories["Button"] = [] (Params params) {
+    return std::make_shared<Button>(params);
+  };
 
   layout_factories["LinearLayout"] = LayoutFactories {
-      [] (Params params) { return new LinearLayout(params);       },
-      [] (Params params) { return new LinearLayoutParams(params); }
+      [] (Params params) { return std::make_shared<LinearLayout>(params);       },
+      [] (Params params) { return std::make_shared<LinearLayoutParams>(params); }
   };
 }
 

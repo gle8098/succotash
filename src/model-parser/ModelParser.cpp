@@ -43,12 +43,12 @@ const char* ERROR_UNKNOWN_NS       = "Unknown namespace %s";
 
 struct Parser {
   explicit Parser(const std::string& filepath);
-  View* ParseModel();
+  ViewPtr ParseModel();
 
  private:
   // Function that recursively parses `tag` subtree of View.
   // params_factory is factory for parent's Layout parameters
-  View* ParseModelRecursive(const pugi::xml_node& tag,
+  ViewPtr ParseModelRecursive(const pugi::xml_node& tag,
                             const ObjectFactory<LayoutParams>* params_factory
                                 = nullptr);
 
@@ -80,7 +80,7 @@ ParseException::ParseException(const std::string& description)
     : runtime_error(description) {
 }
 
-View* ParseModel(const std::string& filepath) {
+ViewPtr ParseModel(const std::string& filepath) {
   Parser parser(filepath);
   return parser.ParseModel();
 }
@@ -93,7 +93,7 @@ Parser::Parser(const std::string& filepath)
     : filepath_(filepath) {
 }
 
-View* Parser::ParseModel() {
+ViewPtr Parser::ParseModel() {
   file_content_ = ReadWholeFile(filepath_);
 
   pugi::xml_document doc;
@@ -106,7 +106,7 @@ View* Parser::ParseModel() {
   return ParseModelRecursive(doc.document_element());
 }
 
-View* Parser::ParseModelRecursive(const pugi::xml_node& tag,
+ViewPtr Parser::ParseModelRecursive(const pugi::xml_node& tag,
                                   const ObjectFactory<LayoutParams>*
                                       params_factory) {
   // 1. Recognize View
@@ -154,9 +154,9 @@ View* Parser::ParseModelRecursive(const pugi::xml_node& tag,
   }
 
   // 3. Call the factories & set everything up
-  View* view = nullptr;
-  Layout* layout = nullptr;
-  LayoutParams* params = nullptr;
+  ViewPtr view = nullptr;
+  LayoutPtr layout = nullptr;
+  LayoutParamsPtr params = nullptr;
 
   try {
     view = view_factory(view_params);
@@ -171,7 +171,7 @@ View* Parser::ParseModelRecursive(const pugi::xml_node& tag,
 
   // 4.
   for (auto child : tag.children()) {
-    View* son = ParseModelRecursive(child, &my_params_factory);
+    ViewPtr son = ParseModelRecursive(child, &my_params_factory);
     view->AddSon(son);
   }
 
@@ -214,3 +214,4 @@ Parser::RowAndCol Parser::GetRowAndColByOffset(ptrdiff_t offset) {
 }
 
 } // namespace succotash
+

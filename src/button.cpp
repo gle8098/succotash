@@ -23,7 +23,7 @@ Button::Button(const sf::String& string) {
 }
 
 Button::Button(const sf::String& string,
-               std::function<void(const Button*)> action) {
+               std::function<void(const ButtonPtr)> action) {
   Init(string);
   SetAction(action);
 }
@@ -42,7 +42,7 @@ void Button::Init(const sf::String& string) {
   shape_.setOutlineThickness(3);
 }
 
-void Button::SetAction(std::function<void(const Button*)> action) {
+void Button::SetAction(std::function<void(const ButtonPtr)> action) {
   action_ = std::move(action);
 }
 
@@ -51,9 +51,9 @@ void Button::DrawSelf(sf::RenderWindow& display) const {
   display.draw(text_);
 }
 
-void Button::OnClickEvent(View* clicked_view) {
+void Button::OnClickEvent(ViewPtr clicked_view) {
   if (action_) {
-    action_(this);
+    action_(shared_from_base<Button>());
   }
 }
 

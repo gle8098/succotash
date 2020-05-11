@@ -12,7 +12,7 @@ struct ParseException : std::runtime_error {
   ParseException(const std::string& description);
 };
 
-View* ParseModel(const std::string& filepath);
+ViewPtr ParseModel(const std::string& filepath);
 
 }  // namespace succotash::xml
 

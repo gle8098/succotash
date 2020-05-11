@@ -1,4 +1,5 @@
 #include "linear_layout.hpp"
+#include "view.hpp"
 
 namespace succotash {
 
@@ -6,13 +7,13 @@ namespace succotash {
 // Local functions.
 //------------------------------------------------------------------------------
 
-inline int GetWeight(succotash::View* son) {
-  auto* params = dynamic_cast<const succotash::LinearLayoutParams*>(
-      son->GetDispositionParams());
+inline int GetWeight(ViewPtr view) {
+  auto params = std::dynamic_pointer_cast<LinearLayoutParams>(
+      view->GetDispositionParams());
   return params->weight;
 }
 
-int GetTotalWeight(const std::vector<succotash::View*>& sons) {
+int GetTotalWeight(const std::vector<ViewPtr>& sons) {
   int total_weight = 0;
   for (auto son : sons) {
     total_weight += GetWeight(son);
@@ -38,7 +39,7 @@ LinearLayout::LinearLayout(const XmlParams& params) {
 // Methods.
 //------------------------------------------------------------------------------
 
-void LinearLayout::Place(const std::vector<View*>& views,
+void LinearLayout::Place(const std::vector<ViewPtr>& views,
                          const sf::RectangleShape& area) {
   int total_weight = GetTotalWeight(views);
 
@@ -50,7 +51,7 @@ void LinearLayout::Place(const std::vector<View*>& views,
 
   if (orientation_ == Type::Horizontal) {  // Put views in a row.
     for (size_t i = 0; i < views_cnt; ++i) {
-      View* view = views[i];
+      ViewPtr view = views[i];
       double weight_ratio = (double) GetWeight(view) / total_weight;
       sf::Vector2f view_size(area_size.x * weight_ratio, area_size.y);
 
@@ -60,7 +61,7 @@ void LinearLayout::Place(const std::vector<View*>& views,
     }
   } else {  // Put views in a column.
     for (size_t i = 0; i < views_cnt; ++i) {
-      View* view = views[i];
+      ViewPtr view = views[i];
       double weight_ratio = (double) GetWeight(view) / total_weight;
       sf::Vector2f view_size(area_size.x, area_size.y * weight_ratio);
 
@@ -71,12 +72,12 @@ void LinearLayout::Place(const std::vector<View*>& views,
   }
 }
 
-LayoutParams* LinearLayout::CreateDefaultParams() const {
-  return new LinearLayoutParams;
+LayoutParamsPtr LinearLayout::CreateDefaultParams() const {
+  return std::make_shared<LinearLayoutParams>();
 }
 
-bool LinearLayout::AreParametersOfMyClass(const LayoutParams* params) const {
-  return dynamic_cast<const LinearLayoutParams*>(params) != nullptr;
+bool LinearLayout::AreParametersOfMyClass(LayoutParamsPtr params) const {
+  return (bool)std::dynamic_pointer_cast<LinearLayoutParams>(params);
 }
 
 LinearLayoutParams::LinearLayoutParams(const XmlParams& params) {

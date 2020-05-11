@@ -12,14 +12,14 @@ public:
 
   void Run();
 
-  const View& GetMasterView() const;
-  View&       GetMasterView();
+  const ViewPtr GetMasterView() const;
+  ViewPtr GetMasterView();
 
 private:
   void HandleClick(const sf::Event::MouseButtonEvent& mouse_pos);
 
 private:
-  View master_view_;
+  ViewPtr master_view_;
   sf::RenderWindow display_;
 };
 

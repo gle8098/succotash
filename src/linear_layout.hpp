@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "layout.hpp"
-#include "view.hpp"
 
 
 namespace succotash {
@@ -21,10 +20,10 @@ public:
   LinearLayout(Type orientation);
   LinearLayout(const XmlParams& xml_params);
 
-  void Place(const std::vector<View*>& views,
+  void Place(const std::vector<ViewPtr>& views,
              const sf::RectangleShape& area) override;
-  LayoutParams* CreateDefaultParams() const override;
-  bool AreParametersOfMyClass(const LayoutParams* params) const override;
+  LayoutParamsPtr CreateDefaultParams() const override;
+  bool AreParametersOfMyClass(const LayoutParamsPtr params) const override;
 
 private:
   Type orientation_;
@@ -38,6 +37,8 @@ struct LinearLayoutParams : LayoutParams {
   int weight = 1;
 };
 
+using LinearLayoutPtr       = std::shared_ptr<LinearLayout>;
+using LinearLayoutParamsPtr = std::shared_ptr<LinearLayoutParams>;
 
 } // succotash
 

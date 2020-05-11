@@ -12,7 +12,7 @@ int main() {
   LoadDefaultFont("font/Arial.ttf");
   xml::InitFactories();
 
-  auto button_action = [](const Button* button) {
+  auto button_action = [](const ButtonPtr button) {
     std::cout << button->GetText().toAnsiString() <<  " pos: " <<
               int(button->GetShape().getPosition().x) << "," <<
               int(button->GetShape().getPosition().y) << " size: " <<
@@ -20,20 +20,18 @@ int main() {
               int(button->GetShape().getSize().y) << std::endl;
   };
 
-  View* view = xml::ParseModel("models/test_window.xml");
-  int search_ids[] = {1, 2, 3, 0};
+  ViewPtr view = xml::ParseModel("models/test_window.xml");
+  int search_ids[] = {1, 2, 3};
   for (int id : search_ids) {
-    if (id == 0) {
-      break;
-    }
-    dynamic_cast<Button*>(view->FindViewById(id))->SetAction(button_action);
+    std::dynamic_pointer_cast<Button>(
+        view->FindViewById(id))->SetAction(button_action);
   }
 
   Editor editor;
-  editor.GetMasterView().AddSon(view);
+  editor.GetMasterView()->AddSon(view);
 
-  LinearLayout layout2(LinearLayout::Type::Vertical);
-  editor.GetMasterView().SetLayout(&layout2);
+  editor.GetMasterView()->SetLayout(std::make_shared<LinearLayout>(
+        LinearLayout::Type::Vertical));
 
   editor.Run();
 }

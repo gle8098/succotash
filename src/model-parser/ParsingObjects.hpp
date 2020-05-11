@@ -6,6 +6,7 @@
 
 #include "../utilities/Convertible.hpp"
 #include "../utilities/StringHashTable.hpp"
+#include <memory>
 
 // Objects which the parser recognizes
 namespace succotash {
@@ -21,7 +22,8 @@ using utilities::StringHashTable;
 using utilities::Convertible;
 
 template <typename T>
-using ObjectFactory = std::function< T* (const StringHashTable<Convertible>&) >;
+using ObjectFactory =
+std::function< std::shared_ptr<T>(const StringHashTable<Convertible>&) >;
 
 struct LayoutFactories {
   ObjectFactory<Layout> layout_factory;
