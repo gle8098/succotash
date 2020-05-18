@@ -17,7 +17,6 @@ class LayoutParams;
 using LayoutParamsPtr = std::shared_ptr<LayoutParams>;
 
 class View;
-using ViewPtr = std::shared_ptr<View>;
 
 
 struct LayoutParams {
@@ -34,7 +33,7 @@ protected:
 public:
   virtual ~Layout() = default;
 
-  virtual void Place(const std::vector<ViewPtr>& views,
+  virtual void Place(const std::vector<View*>& views,
                      const sf::RectangleShape& area) = 0;
 
   virtual LayoutParamsPtr CreateDefaultParams() const = 0;

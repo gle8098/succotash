@@ -1,6 +1,9 @@
-<View layout="LinearLayout" layout:orientation="vertical"
-      xmlns:layout="layout" xmlns:parent="parent">
-    <Button name="Button 1" id="1" parent:weight="2" />
-    <Button name="Button 2" id="2" />
-    <Button name="Button 3" id="3" />
+<!-- Note that first View doesn't have layout params. -->
+<View>
+    <View layout="LinearLayout" layout:orientation="horizontal"
+          xmlns:layout="layout" xmlns:parent="parent">
+        <Button name="Button 1" id="1" parent:weight="2" />
+        <Button name="Button 2" id="2" />
+        <Button name="Button 3" id="3" />
+    </View>
 </View>

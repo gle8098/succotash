@@ -9,22 +9,18 @@
 
 namespace succotash {
 
-class Button;
-using ButtonPtr = std::shared_ptr<Button>;
-
-
 class Button : public View {
 public:
   Button(const sf::String& string);
-  Button(const sf::String& string, std::function<void(const ButtonPtr)> action);
+  Button(const sf::String& string, std::function<void(const Button*)> action);
   Button(const Params& params);
   ~Button() = default;
 
-  void SetAction(std::function<void(const ButtonPtr)> action);
+  void SetAction(std::function<void(const Button*)> action);
   const sf::String& GetText() const;
 
   void DrawSelf(sf::RenderWindow& window) const override;
-  void OnClickEvent(ViewPtr clicked_view)         override;
+  void OnClickEvent(View* clicked_view)         override;
 
   void MoveTo(const sf::Vector2f& new_pos)  override;
   void Resize(const sf::Vector2f& new_size) override;
@@ -35,7 +31,7 @@ public:
 
 private:
   sf::Text text_;
-  std::function<void(const ButtonPtr)> action_;
+  std::function<void(const Button*)> action_;
 };
 
 } // succotash

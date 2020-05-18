@@ -5,13 +5,12 @@
 namespace succotash {
 
 Editor::Editor()
-    : master_view_(std::make_shared<View>()),
-      display_(sf::VideoMode(800, 600), "Succotash") {
+    : display_(sf::VideoMode(800, 600), "Succotash") {
 
   display_.setFramerateLimit(50);
 
-  master_view_->MoveTo(sf::Vector2f(0, 0));
-  master_view_->Resize(sf::Vector2f(800, 600));  // tmp
+  master_view_.MoveTo(sf::Vector2f(0, 0));
+  master_view_.Resize(sf::Vector2f(800, 600));  // tmp
 }
 
 void Editor::Run() {
@@ -37,16 +36,16 @@ void Editor::Run() {
     }
     // Redraw window
     display_.clear();
-    master_view_->Draw(display_);
+    master_view_.Draw(display_);
     display_.display();
   }
 }
 
 void Editor::HandleClick(const sf::Event::MouseButtonEvent& click) {
-  master_view_->HandleClick(sf::Vector2i(click.x, click.y));
+  master_view_.HandleClick(sf::Vector2i(click.x, click.y));
 }
 
-const ViewPtr Editor::GetMasterView() const { return master_view_; }
-ViewPtr       Editor::GetMasterView()       { return master_view_; }
+const View* Editor::GetMasterView() const { return &master_view_; }
+View*       Editor::GetMasterView()       { return &master_view_; }
 
 }  // succotash

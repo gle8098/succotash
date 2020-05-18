@@ -43,14 +43,14 @@ const char* ERROR_UNKNOWN_NS       = "Unknown namespace %s";
 
 struct Parser {
   explicit Parser(const std::string& filepath);
-  ViewPtr ParseModel();
+  View* ParseModel();
 
  private:
   // Function that recursively parses `tag` subtree of View.
   // params_factory is factory for parent's Layout parameters
-  ViewPtr ParseModelRecursive(const pugi::xml_node& tag,
-                            const ObjectFactory<LayoutParams>* params_factory
-                                = nullptr);
+  View* ParseModelRecursive(
+      const pugi::xml_node& tag,
+      const ObjectFactoryShared<LayoutParams>* params_factory = nullptr);
 
   // Throws an instance of ParseException.
   // offset is returned by pugi::xml_node::ofset_debug().
@@ -80,7 +80,7 @@ ParseException::ParseException(const std::string& description)
     : runtime_error(description) {
 }
 
-ViewPtr ParseModel(const std::string& filepath) {
+View* ParseModel(const std::string& filepath) {
   Parser parser(filepath);
   return parser.ParseModel();
 }
@@ -93,7 +93,7 @@ Parser::Parser(const std::string& filepath)
     : filepath_(filepath) {
 }
 
-ViewPtr Parser::ParseModel() {
+View* Parser::ParseModel() {
   file_content_ = ReadWholeFile(filepath_);
 
   pugi::xml_document doc;
@@ -106,22 +106,22 @@ ViewPtr Parser::ParseModel() {
   return ParseModelRecursive(doc.document_element());
 }
 
-ViewPtr Parser::ParseModelRecursive(const pugi::xml_node& tag,
-                                  const ObjectFactory<LayoutParams>*
+View* Parser::ParseModelRecursive(const pugi::xml_node& tag,
+                                  const ObjectFactoryShared<LayoutParams>*
                                       params_factory) {
   // 1. Recognize View
   auto view_fact_it = view_factories.find(tag.name());
   if (view_fact_it == view_factories.end()) {
     ThrowException(tag.offset_debug(), ERROR_VIEW_NOT_FOUND, tag.name());
   }
-  ObjectFactory<View>& view_factory = view_fact_it->second;
+  ObjectFactoryRaw<View>& view_factory = view_fact_it->second;
 
   // 1b. Define most of the variables
   StringHashTable<Convertible> view_params;
   StringHashTable<Convertible> layout_params;
   StringHashTable<Convertible> parent_params;
-  ObjectFactory<Layout> layout_factory = nullptr;
-  ObjectFactory<LayoutParams> my_params_factory = nullptr;
+  ObjectFactoryShared<Layout> layout_factory = nullptr;
+  ObjectFactoryShared<LayoutParams> my_params_factory = nullptr;
 
   // 2. Recognize attributes
   for (auto attr : tag.attributes()) {
@@ -154,7 +154,7 @@ ViewPtr Parser::ParseModelRecursive(const pugi::xml_node& tag,
   }
 
   // 3. Call the factories & set everything up
-  ViewPtr view = nullptr;
+  View* view = nullptr;
   LayoutPtr layout = nullptr;
   LayoutParamsPtr params = nullptr;
 
@@ -166,12 +166,21 @@ ViewPtr Parser::ParseModelRecursive(const pugi::xml_node& tag,
     ThrowException(tag.offset_debug(), ex.what());
   }
 
-  view->SetLayout(layout);
-  view->SetDispositionParams(params);
+  if (layout) {
+    view->SetLayout(layout);
+  }
+  if (params) {
+    view->SetDispositionParams(params);
+  }
 
   // 4.
   for (auto child : tag.children()) {
-    ViewPtr son = ParseModelRecursive(child, &my_params_factory);
+    View* son;
+    if (my_params_factory) {
+      son = ParseModelRecursive(child, &my_params_factory);
+    } else {
+      son = ParseModelRecursive(child, nullptr);
+    }
     view->AddSon(son);
   }
 

@@ -20,7 +20,7 @@ public:
   LinearLayout(Type orientation);
   LinearLayout(const XmlParams& xml_params);
 
-  void Place(const std::vector<ViewPtr>& views,
+  void Place(const std::vector<View*>& views,
              const sf::RectangleShape& area) override;
   LayoutParamsPtr CreateDefaultParams() const override;
   bool AreParametersOfMyClass(const LayoutParamsPtr params) const override;

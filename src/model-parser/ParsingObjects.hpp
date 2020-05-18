@@ -22,15 +22,19 @@ using utilities::StringHashTable;
 using utilities::Convertible;
 
 template <typename T>
-using ObjectFactory =
+using ObjectFactoryRaw =
+std::function< T*(const StringHashTable<Convertible>&) >;
+
+template <typename T>
+using ObjectFactoryShared =
 std::function< std::shared_ptr<T>(const StringHashTable<Convertible>&) >;
 
 struct LayoutFactories {
-  ObjectFactory<Layout> layout_factory;
-  ObjectFactory<LayoutParams> params_factory;
+  ObjectFactoryShared<Layout> layout_factory;
+  ObjectFactoryShared<LayoutParams> params_factory;
 };
 
-extern StringHashTable<ObjectFactory<View>> view_factories;
+extern StringHashTable<ObjectFactoryRaw<View>> view_factories;
 extern StringHashTable<LayoutFactories> layout_factories;
 
 void InitFactories();

@@ -1,11 +1,10 @@
 #ifndef SUCCOTASH_VIEW_HPP
 #define SUCCOTASH_VIEW_HPP
-
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <memory>
 
 #include "utilities/StringHashTable.hpp"
+#include "utilities/ptr.hpp"
 // TODO: remove above StringHashTable include when will be possible
 
 namespace succotash {
@@ -21,30 +20,32 @@ using LayoutPtr = std::shared_ptr<Layout>;
 class LayoutParams;
 using LayoutParamsPtr = std::shared_ptr<LayoutParams>;
 
-class View;
-using ViewPtr = std::shared_ptr<View>;
 
-
-class View : public std::enable_shared_from_this<View> {
+class View {
 protected:
   using Params = utilities::StringHashTable<utilities::Convertible>;
 
 public:
   View();
   View(const Params& params);
-  virtual ~View() = default;
+  virtual ~View();
 
   void Draw(sf::RenderWindow& display) const;
 
-  void AddSon(ViewPtr view);
-  void InsertSonBefore(std::vector<ViewPtr>::const_iterator position,
-                       ViewPtr view);
-  bool RemoveSon(ViewPtr view);
+  /// Resize sons_ array to count sons.
+  void ReserveSons(size_t count);
+  virtual void AddSon(View* view);
+  virtual void InsertSonBefore(std::vector<View*>::const_iterator position,
+                               View* view);
+  virtual bool  RemoveSon(View* view);
+  virtual View* GetSon(size_t index) const;
+  /// Replace son by index.
+  virtual void  SetSon(size_t index, View* new_son);
 
-  bool IsPointWithinBounds(const sf::Vector2i& point) const;
-  ViewPtr HandleClick(const sf::Vector2i& click_pos);
+  bool    IsPointWithinBounds(const sf::Vector2i& point) const;
+  View* HandleClick(const sf::Vector2i& click_pos);
 
-  virtual void OnClickEvent(ViewPtr clicked_view);
+  virtual void OnClickEvent(View* clicked_view);
 
   virtual void MoveTo(const sf::Vector2f& new_pos);
   virtual void MoveBy(const sf::Vector2f& offset);
@@ -52,28 +53,26 @@ public:
 
   void SetId(int id);
   void SetLayout(LayoutPtr layout);
-
   void SetDispositionParams(LayoutParamsPtr disposition_params);
 
-  int                         GetId()     const;
-  const LayoutPtr             GetLayout() const;
-  ViewPtr                     GetParent() const;
-  const std::vector<ViewPtr>& GetSons()   const;
-  sf::RectangleShape          GetShape()  const;
-  const LayoutParamsPtr       GetDispositionParams() const;
+  int                       GetId()     const;
+  const LayoutPtr           GetLayout() const;
+  View*                     GetParent() const;
+  const std::vector<View*>& GetSons()   const;
+  sf::RectangleShape        GetShape()  const;
+  const LayoutParamsPtr     GetDispositionParams() const;
 
-  ViewPtr FindViewById(int id);
+  View* FindViewById(int id);
 
 protected:
-  void UpdateLayoutParams(ViewPtr son) const;
+  void UpdateLayoutParams(View* son) const;
   void InvokeLayout() const;
 
   virtual void DrawSelf(sf::RenderWindow& display) const;
 
-  template <typename Derived>
-  std::shared_ptr<Derived> shared_from_base() {
-    return std::static_pointer_cast<Derived>(shared_from_this());
-  }
+private:
+  void Init();
+  void UpdateSon(View* son);
 
 // === Data ===
 
@@ -82,8 +81,8 @@ protected:
   LayoutPtr layout_;
 
 private:
-  ViewPtr parent_;
-  std::vector<ViewPtr> sons_;
+  std::vector<View*> sons_;
+  View* parent_;
   int id_;
   LayoutParamsPtr disposition_params_;
 };

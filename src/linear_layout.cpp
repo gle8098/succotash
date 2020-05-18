@@ -7,13 +7,13 @@ namespace succotash {
 // Local functions.
 //------------------------------------------------------------------------------
 
-inline int GetWeight(ViewPtr view) {
+inline int GetWeight(View* view) {
   auto params = std::dynamic_pointer_cast<LinearLayoutParams>(
       view->GetDispositionParams());
   return params->weight;
 }
 
-int GetTotalWeight(const std::vector<ViewPtr>& sons) {
+int GetTotalWeight(const std::vector<View*>& sons) {
   int total_weight = 0;
   for (auto son : sons) {
     total_weight += GetWeight(son);
@@ -39,7 +39,7 @@ LinearLayout::LinearLayout(const XmlParams& params) {
 // Methods.
 //------------------------------------------------------------------------------
 
-void LinearLayout::Place(const std::vector<ViewPtr>& views,
+void LinearLayout::Place(const std::vector<View*>& views,
                          const sf::RectangleShape& area) {
   int total_weight = GetTotalWeight(views);
 
@@ -51,7 +51,7 @@ void LinearLayout::Place(const std::vector<ViewPtr>& views,
 
   if (orientation_ == Type::Horizontal) {  // Put views in a row.
     for (size_t i = 0; i < views_cnt; ++i) {
-      ViewPtr view = views[i];
+      auto view = views[i];
       double weight_ratio = (double) GetWeight(view) / total_weight;
       sf::Vector2f view_size(area_size.x * weight_ratio, area_size.y);
 
@@ -61,7 +61,7 @@ void LinearLayout::Place(const std::vector<ViewPtr>& views,
     }
   } else {  // Put views in a column.
     for (size_t i = 0; i < views_cnt; ++i) {
-      ViewPtr view = views[i];
+      auto view = views[i];
       double weight_ratio = (double) GetWeight(view) / total_weight;
       sf::Vector2f view_size(area_size.x, area_size.y * weight_ratio);
 

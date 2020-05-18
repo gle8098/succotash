@@ -18,7 +18,7 @@
 
 #define ASSERT_WARN(statement)                                        \
   if (!(statement)) {                                                 \
-    fprintf(stderr, "WARNING: %s : %s : %d assertion `%s` failed.\n", \
+    fprintf(stderr, "WARNING: %s : %s : %d assertion `%s` failed\n",  \
             __FILE__, __func__, __LINE__, #statement);                \
   }
 
