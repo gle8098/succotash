@@ -12,6 +12,7 @@ void DefaultLayout::Place(const std::vector<View*>& views,
     WARNING("default layout cannot handle more than one view");
   }
   for (auto view : views) {  // Fit views to area
+    view->MoveTo(area.getPosition());
     view->Resize(area.getSize());
   }
 }

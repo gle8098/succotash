@@ -1,7 +1,8 @@
+#include <iostream>
 #include "button.hpp"
+#include "pane.hpp"
 #include "editor.hpp"
 #include "font_manager.hpp"
-#include <iostream>
 #include "linear_layout.hpp"
 #include "model-parser/ModelParser.hpp"
 #include "model-parser/ParsingObjects.hpp"

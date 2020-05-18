@@ -12,6 +12,10 @@ namespace succotash {
 // Ctors.
 //------------------------------------------------------------------------------
 
+Button::Button() {
+  Init("");
+}
+
 Button::Button(const Params& params)
     : View(params) {
 

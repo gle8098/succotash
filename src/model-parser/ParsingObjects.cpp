@@ -28,9 +28,6 @@ void InitFactories() {
     return new Tab(params);
   };
   // Aliases for parser tab content.
-  view_factories["Head"] = [] (Params params) {
-    return new View(params);
-  };
   view_factories["Body"] = [] (Params params) {
     return new View(params);
   };

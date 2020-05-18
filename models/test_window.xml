@@ -1,4 +1,5 @@
 <!-- Note that first View doesn't have layout params. -->
+<!--
 <View>
     <View layout="LinearLayout" layout:orientation="horizontal"
           xmlns:layout="layout" xmlns:parent="parent">
@@ -7,3 +8,19 @@
         <Button name="Button 3" id="3" />
     </View>
 </View>
+
+-->
+<Pane>
+    <Tab name="Tab 1" layout="LinearLayout" layout:orientation="horizontal">
+        <Button name="Button 1" id="1" parent:weight="3" />
+        <Button name="Button 2" id="2" />
+        <Button name="Button 3" id="3" />
+    </Tab>
+
+    <Tab name="Tab 2" layout="LinearLayout" layout:orientation="vertical">
+        <Button name="Button x" id="4" />
+        <Button name="Button y" id="5" />
+        <Button name="Button z" id="6" />
+    </Tab>
+
+</Pane>

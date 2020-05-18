@@ -20,8 +20,12 @@ View::View() {
 View::View(const Params& params) {
   Init();
 
-  if (params.find("id") != params.end()) {
-    SetId(params.at("id").ToInt());
+  Params::const_iterator it;
+  if ((it = params.find("id")) != params.end()) {
+    SetId(it->second.ToInt());
+  }
+  if ((it = params.find("color")) != params.end()) {
+    shape_.setFillColor(sf::Color(it->second.ToInt()));
   }
 }
 
@@ -56,7 +60,7 @@ void View::Draw(sf::RenderWindow& display) const {
 // Sons.
 
 void View::ReserveSons(size_t count) {
-  ASSERT_WARN(sons_.size() <= count);
+  ASSERT(sons_.size() <= count);
   sons_.resize(count, nullptr);
 }
 
@@ -86,15 +90,18 @@ bool View::RemoveSon(View* view) {
 }
 
 View* View::GetSon(size_t index) const {
-  ASSERT_WARN(index < sons_.size());
+  ASSERT(index < sons_.size());
 
   return sons_[index];
 }
 
 void View::SetSon(size_t index, View* new_son) {
-  ASSERT_WARN(index < sons_.size());
+  if (sons_[index] == new_son) {
+    return;
+  }
 
-  delete sons_[index];
+  ASSERT(index < sons_.size());
+  //delete sons_[index];        This line breaks program.
 
   sons_[index] = new_son;
   UpdateSon(new_son);

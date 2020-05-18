@@ -11,12 +11,14 @@ namespace succotash {
 
 class Button : public View {
 public:
+  Button();
   Button(const sf::String& string);
   Button(const sf::String& string, std::function<void(const Button*)> action);
   Button(const Params& params);
   ~Button() = default;
 
   void SetAction(std::function<void(const Button*)> action);
+  void SetString(const sf::String& string);
   const sf::String& GetText() const;
 
   void DrawSelf(sf::RenderWindow& window) const override;
