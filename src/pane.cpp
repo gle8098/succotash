@@ -58,6 +58,11 @@ Pane::Pane() {
   Init();
 }
 
+Pane::~Pane() {
+  // Tabs clear content on their own.
+  SetSon(content_id_, nullptr);
+}
+
 Pane::Pane(const Params& params)
     : View(params) {
 

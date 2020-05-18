@@ -34,7 +34,7 @@ class Pane : public View {
 public:
   Pane();
   Pane(const Params& params);
-  ~Pane() = default;
+  ~Pane();
 
   void AddTab(Tab* tab);
   void SwitchTab(Tab* tab);
