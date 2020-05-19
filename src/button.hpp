@@ -29,7 +29,7 @@ public:
 
   // Used to solve a problem of base initializer and a delegation in
   // Button(const Params& params);
-  void Init(const sf::String& string);
+  void Init();
 
 private:
   sf::Text text_;

@@ -1,26 +1,98 @@
-<!-- Note that first View doesn't have layout params. -->
-<!--
-<View>
-    <View layout="LinearLayout" layout:orientation="horizontal"
-          xmlns:layout="layout" xmlns:parent="parent">
-        <Button name="Button 1" id="1" parent:weight="2" />
-        <Button name="Button 2" id="2" />
-        <Button name="Button 3" id="3" />
+<View layout="LinearLayout" layout:orientation="vertical">
+    <!-- Menubar -->
+    <View layout="LinearLayout" layout:orientation="horizontal" parent:weight="1">
+        <Button name="File" color="0xFFFDD0FF" id ="1" />
+        <Button name="Edit" color="0xFFFDD0FF" id ="2" />
+        <Button name="Help" color="0xFFFDD0FF" id ="3" />
+        <!-- Layout plug -->
+        <Button parent:weight="10" />
+    </View>
+
+    <!-- Horizontal layout which places left & right panels and main image -->
+    <View layout="LinearLayout" layout:orientation="horizontal" parent:weight="20">
+
+        <!-- Left panel -->
+        <View layout="LinearLayout" layout:orientation="vertical">
+            <Button/>
+
+            <Pane parent:weight="3">
+                <Tab name="Basic instruments" color="0xFFFDD0FF"
+                    layout="LinearLayout" layout:orientation="vertical">
+                    <Button name="Button 1" color="0xfffda0ff" id="4" />
+                    <Button name="Button 2" color="0xfffda0ff" id="5" />
+                    <Button name="Button 3" color="0xfffda0ff" id="6" />
+                </Tab>
+            </Pane>
+
+            <Button/>
+
+            <Pane parent:weight="3" >
+                <Tab name="Move instruments" color="0xFFFDD0FF"
+                    layout="LinearLayout" layout:orientation="horizontal">
+                    <Button name="But1" color="0xfffda0ff" id="7" />
+                    <Button name="But2" color="0xfffda0ff" id="8" />
+                    <Button name="But3" color="0xfffda0ff" id="9" />
+                </Tab>
+            </Pane>
+
+            <Button/>
+
+            <Pane parent:weight="3">
+                <Tab name="Share" color="0xFFFDD0FF"
+                    layout="LinearLayout" layout:orientation="vertical">
+                    <Button name="VK"       color="0xfffda0ff" id="10" />
+                    <Button name="Facebook" color="0xfffda0ff" id="11" />
+                    <Button name="Inst"     color="0xfffda0ff" id="12" />
+                </Tab>
+            </Pane>
+
+            <Button/>
+
+            <Pane parent:weight="3">
+                <Tab name="Histogram" color="0xFFFDD0FF"
+                    layout="LinearLayout" layout:orientation="vertical" >
+                    <Button name="Image here" color="0xF0E68Cff" id="13" parent:weight="3"/>
+                    <Button name="" />
+                </Tab>
+            </Pane>
+        </View>
+
+        <!-- Main image -->
+        <Button name="Image" parent:weight="3" color="0xF0E68Cff">
+        </Button>
+
+        <!-- Right panel -->
+        <View layout="LinearLayout" layout:orientation="vertical">
+            <Button name="" />
+
+            <Pane parent:weight="2">
+                <Tab name="Some pane" color="0xFFFDD0FF"
+                    layout="LinearLayout" layout:orientation="horizontal">
+                    <Button name="but1" color="0xfffda0ff" id="13" />
+                    <Button name="but2" color="0xfffda0ff" id="14" />
+                    <Button name="but3" color="0xfffda0ff" id="15" />
+                </Tab>
+            </Pane>
+
+            <Button name="" />
+
+            <Pane parent:weight="6">
+                <Tab name="History" color="0xFFFDD0FF"
+                    layout="LinearLayout" layout:orientation="vertical">
+                    <Button name="move rect" id="16" />
+                    <Button name="brush" id="17" />
+                    <Button name="brush" id="18" />
+                    <Button name="open file" id="19" />
+                </Tab>
+
+                <Tab name="Colors" color="0xFFFDD0FF"
+                    layout="LinearLayout" layout:orientation="vertical">
+                    <Button name="Red"   color="0xff0000af" id="20" />
+                    <Button name="Green" color="0x00ff00af" id="21" />
+                    <Button name="Blue"  color="0x0000ffaf" id="22" />
+                </Tab>
+            </Pane>
+        </View>
+
     </View>
 </View>
-
--->
-<Pane>
-    <Tab name="Tab 1" layout="LinearLayout" layout:orientation="horizontal">
-        <Button name="Button 1" id="1" parent:weight="3" />
-        <Button name="Button 2" id="2" />
-        <Button name="Button 3" id="3" />
-    </Tab>
-
-    <Tab name="Tab 2" layout="LinearLayout" layout:orientation="vertical">
-        <Button name="Button x" id="4" />
-        <Button name="Button y" id="5" />
-        <Button name="Button z" id="6" />
-    </Tab>
-
-</Pane>

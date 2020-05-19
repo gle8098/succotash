@@ -13,33 +13,41 @@ namespace succotash {
 //------------------------------------------------------------------------------
 
 Button::Button() {
-  Init("");
+  Init();
 }
 
 Button::Button(const Params& params)
     : View(params) {
+  Init();
 
-  Init(params.at("name").ToString());
+  Params::const_iterator it;
+  if ((it = params.find("name")) != params.end()) {
+    SetString(it->second.ToString());
+  }
+
+  if ((it = params.find("color")) != params.end()) {
+    shape_.setFillColor(sf::Color(it->second.ToInt()));
+  }
 }
 
 Button::Button(const sf::String& string) {
-  Init(string);
+  Init();
+  SetString(string);
 }
 
 Button::Button(const sf::String& string,
-               std::function<void(const Button*)> action) {
-  Init(string);
+               std::function<void(const Button*)> action)
+    : Button(string) {
   SetAction(action);
 }
 
-void Button::Init(const sf::String& string) {
-  text_.setString(string);
+void Button::Init() {
   text_.setFont(GetDefaultFont());
   text_.setFillColor(sf::Color::Black);
 
   shape_.setFillColor(sf::Color::White);
   shape_.setOutlineColor(sf::Color::Red);
-  shape_.setOutlineThickness(3);
+  shape_.setOutlineThickness(2);
 }
 
 //------------------------------------------------------------------------------
@@ -48,6 +56,10 @@ void Button::Init(const sf::String& string) {
 
 void Button::SetAction(std::function<void(const Button*)> action) {
   action_ = std::move(action);
+}
+
+void Button::SetString(const sf::String& string) {
+  text_.setString(string);
 }
 
 void Button::DrawSelf(sf::RenderWindow& display) const {

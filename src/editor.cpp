@@ -5,12 +5,12 @@
 namespace succotash {
 
 Editor::Editor()
-    : display_(sf::VideoMode(800, 600), "Succotash") {
+    : display_(sf::VideoMode(1400, 800), "Succotash") {
 
   display_.setFramerateLimit(50);
 
   master_view_.MoveTo(sf::Vector2f(0, 0));
-  master_view_.Resize(sf::Vector2f(800, 600));  // tmp
+  master_view_.Resize(sf::Vector2f(display_.getSize()));
 }
 
 void Editor::Run() {

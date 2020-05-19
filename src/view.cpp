@@ -24,9 +24,6 @@ View::View(const Params& params) {
   if ((it = params.find("id")) != params.end()) {
     SetId(it->second.ToInt());
   }
-  if ((it = params.find("color")) != params.end()) {
-    shape_.setFillColor(sf::Color(it->second.ToInt()));
-  }
 }
 
 View::~View() {
