@@ -65,8 +65,12 @@ Pane::~Pane() {
 
 Pane::Pane(const Params& params)
     : View(params) {
-
   Init();
+
+  Params::const_iterator it;
+  if ((it = params.find("headWeight")) != params.end()) {
+    SetHeadWeight(it->second.ToFloat());
+  }
 }
 
 void Pane::Init() {
@@ -80,17 +84,15 @@ void Pane::Init() {
   // Head
   auto head_params = CreatePtr<LinearLayoutParams>();
 
-  head_params->weight = 3;
+  head_params->weight = 0.3;
   head->SetDispositionParams(head_params);
   head->SetLayout(CreatePtr<LinearLayout>(LinearLayout::Type::Horizontal));
 
   // Content
   auto content_params = CreatePtr<LinearLayoutParams>();
-  content_params->weight = 7;
+  content_params->weight = 1;
   content->SetDispositionParams(content_params);
   content->AddSon(new View);
-
-  //content_.SetLayout(CreatePtr LinearLayout(LinearLayout::Type::Vertical));
 
   // Pane
   SetLayout(CreatePtr<LinearLayout>(LinearLayout::Type::Vertical));
@@ -118,6 +120,15 @@ void Pane::SwitchTab(Tab* tab) {
   active_tab_ = tab;
   active_tab_->Activate();
   GetSon(content_id_)->SetSon(0, tab->GetContent());
+}
+
+void Pane::SetHeadWeight(float weight) {
+  auto head = GetSon(head_id_);
+  LinearLayoutParamsPtr params = std::make_shared<LinearLayoutParams>(
+    *std::dynamic_pointer_cast<LinearLayoutParams>(
+      head->GetDispositionParams()));
+  params->weight = weight;
+  head->SetDispositionParams(params);
 }
 
 void Pane::OnClickEvent(View* clicked_view) {

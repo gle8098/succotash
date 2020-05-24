@@ -21,7 +21,7 @@ int main() {
               int(button->GetShape().getSize().y) << std::endl;
   };
 
-  View* view = xml::ParseModel("models/test_window.xml");
+  View* view = xml::ParseModel("models/main_window.xml");
   int search_ids[] = {1, 2, 3};
   for (int id : search_ids) {
     dynamic_cast<Button*>(view->FindViewById(id))->SetAction(button_action);

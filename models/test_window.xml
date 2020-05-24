@@ -13,9 +13,9 @@
 
         <!-- Left panel -->
         <View layout="LinearLayout" layout:orientation="vertical">
-            <Button/>
+            <Button parent:weight="0.3"/>
 
-            <Pane parent:weight="3">
+            <Pane>
                 <Tab name="Basic instruments" color="0xFFFDD0FF"
                     layout="LinearLayout" layout:orientation="vertical">
                     <Button name="Button 1" color="0xfffda0ff" id="4" />
@@ -24,9 +24,9 @@
                 </Tab>
             </Pane>
 
-            <Button/>
+            <Button parent:weight="0.3"/>
 
-            <Pane parent:weight="3" >
+            <Pane headWeight="1">
                 <Tab name="Move instruments" color="0xFFFDD0FF"
                     layout="LinearLayout" layout:orientation="horizontal">
                     <Button name="But1" color="0xfffda0ff" id="7" />
@@ -35,9 +35,9 @@
                 </Tab>
             </Pane>
 
-            <Button/>
+            <Button parent:weight="0.3"/>
 
-            <Pane parent:weight="3">
+            <Pane>
                 <Tab name="Share" color="0xFFFDD0FF"
                     layout="LinearLayout" layout:orientation="vertical">
                     <Button name="VK"       color="0xfffda0ff" id="10" />
@@ -46,9 +46,9 @@
                 </Tab>
             </Pane>
 
-            <Button/>
+            <Button parent:weight="0.3"/>
 
-            <Pane parent:weight="3">
+            <Pane>
                 <Tab name="Histogram" color="0xFFFDD0FF"
                     layout="LinearLayout" layout:orientation="vertical" >
                     <Button name="Image here" color="0xF0E68Cff" id="13" parent:weight="3"/>
@@ -63,9 +63,9 @@
 
         <!-- Right panel -->
         <View layout="LinearLayout" layout:orientation="vertical">
-            <Button name="" />
+            <Button />
 
-            <Pane parent:weight="2">
+            <Pane>
                 <Tab name="Some pane" color="0xFFFDD0FF"
                     layout="LinearLayout" layout:orientation="horizontal">
                     <Button name="but1" color="0xfffda0ff" id="13" />
@@ -74,22 +74,22 @@
                 </Tab>
             </Pane>
 
-            <Button name="" />
+            <Button/>
 
-            <Pane parent:weight="6">
+            <Pane>
                 <Tab name="History" color="0xFFFDD0FF"
                     layout="LinearLayout" layout:orientation="vertical">
-                    <Button name="move rect" id="16" />
-                    <Button name="brush" id="17" />
-                    <Button name="brush" id="18" />
-                    <Button name="open file" id="19" />
+                    <Button name="move rect" color="0xfffda0ff" id="16" />
+                    <Button name="brush"     color="0xfffda0ff" id="17" />
+                    <Button name="brush"     color="0xfffda0ff" id="18" />
+                    <Button name="open file" color="0xfffda0ff" id="19" />
                 </Tab>
 
                 <Tab name="Colors" color="0xFFFDD0FF"
                     layout="LinearLayout" layout:orientation="vertical">
-                    <Button name="Red"   color="0xff0000af" id="20" />
-                    <Button name="Green" color="0x00ff00af" id="21" />
-                    <Button name="Blue"  color="0x0000ffaf" id="22" />
+                    <Button name="Red"   color="0xff0000df" id="20" />
+                    <Button name="Green" color="0x00ff00df" id="21" />
+                    <Button name="Blue"  color="0x0000ffdf" id="22" />
                 </Tab>
             </Pane>
         </View>

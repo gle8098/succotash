@@ -40,6 +40,9 @@ public:
   void SwitchTab(Tab* tab);
   Tab* GetActiveTab() const;
 
+  /// Default head weight is 0.3 while content's weight is ummutable 1.
+  void SetHeadWeight(float weight);
+
 private:
   void Init();
   void OnClickEvent(View* clicked_view) override;

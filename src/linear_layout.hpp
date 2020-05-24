@@ -32,6 +32,7 @@ private:
 
 struct LinearLayoutParams : LayoutParams {
   LinearLayoutParams() = default;
+  LinearLayoutParams(const LinearLayoutParams&) = default;
   LinearLayoutParams(const XmlParams& xml_params);
 
   float weight = 1.0;
