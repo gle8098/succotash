@@ -27,10 +27,6 @@ void InitFactories() {
   view_factories["Tab"] = [] (Params params) {
     return new Tab(params);
   };
-  // Aliases for parser tab content.
-  view_factories["Body"] = [] (Params params) {
-    return new View(params);
-  };
 
   layout_factories["LinearLayout"] = LayoutFactories {
       [] (Params params) { return std::make_shared<LinearLayout>(params);       },

@@ -5,7 +5,7 @@
 namespace succotash {
 
 Editor::Editor()
-    : display_(sf::VideoMode(1400, 800), "Succotash") {
+    : display_(sf::VideoMode(1400, 900), "Succotash") {
 
   display_.setFramerateLimit(50);
 

@@ -18,7 +18,7 @@ inline void ThrowErrorImpl(const char* value, const char* desc) {
 template <typename T, typename Func>
 inline T ConvertStdlib(const char* value, Func func, const char* error_desc) {
   char* error;
-  long result = func(value, &error);
+  T result = func(value, &error);
 
   if (*value == '\0' || *error != '\0') {
     ThrowErrorImpl(value, error_desc);

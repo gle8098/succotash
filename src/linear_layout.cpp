@@ -7,14 +7,14 @@ namespace succotash {
 // Local functions.
 //------------------------------------------------------------------------------
 
-inline int GetWeight(View* view) {
+inline float GetWeight(View* view) {
   auto params = std::dynamic_pointer_cast<LinearLayoutParams>(
       view->GetDispositionParams());
   return params->weight;
 }
 
-int GetTotalWeight(const std::vector<View*>& sons) {
-  int total_weight = 0;
+float GetTotalWeight(const std::vector<View*>& sons) {
+  float total_weight = 0;
   for (auto son : sons) {
     total_weight += GetWeight(son);
   }
@@ -41,7 +41,7 @@ LinearLayout::LinearLayout(const XmlParams& params) {
 
 void LinearLayout::Place(const std::vector<View*>& views,
                          const sf::RectangleShape& area) {
-  int total_weight = GetTotalWeight(views);
+  float total_weight = GetTotalWeight(views);
 
   auto area_pos  = area.getPosition();
   auto area_size = area.getSize();
@@ -82,7 +82,7 @@ bool LinearLayout::AreParametersOfMyClass(LayoutParamsPtr params) const {
 
 LinearLayoutParams::LinearLayoutParams(const XmlParams& params) {
   auto weight_it = params.find("weight");
-  weight = weight_it != params.end() ?  weight_it->second.ToInt() : 1;
+  weight = weight_it != params.end() ?  weight_it->second.ToFloat() : 1.0;
 }
 
 } // succotash

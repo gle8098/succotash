@@ -34,7 +34,7 @@ struct LinearLayoutParams : LayoutParams {
   LinearLayoutParams() = default;
   LinearLayoutParams(const XmlParams& xml_params);
 
-  int weight = 1;
+  float weight = 1.0;
 };
 
 using LinearLayoutPtr       = std::shared_ptr<LinearLayout>;
