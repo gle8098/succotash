@@ -1,100 +1,96 @@
 <View layout="LinearLayout" layout:orientation="vertical">
     <!-- Menubar -->
-    <View layout="LinearLayout" layout:orientation="horizontal" parent:weight="1">
-        <Button name="File" color="0xFFFDD0FF" id ="1" />
-        <Button name="Edit" color="0xFFFDD0FF" id ="2" />
-        <Button name="Help" color="0xFFFDD0FF" id ="3" />
-        <!-- Layout plug -->
-        <Button parent:weight="10" />
-    </View>
+    <Sprite layout="LinearLayout" layout:orientation="horizontal" parent:weight="1" texture="media/textures/menubar/menubar.png">
+        <Button name="File" color="0xFFFDD0FF" id ="1" texture="media/textures/button1.png"/>
+        <Button name="Edit" color="0xFFFDD0FF" id ="2" texture="media/textures/button1.png"/>
+        <Button name="Help" color="0xFFFDD0FF" id ="3" texture="media/textures/button1.png"/>
+        <!-- Layout empty -->
+        <View parent:weight="20"/>
+    </Sprite>
 
     <!-- Horizontal layout which places left & right panels and main image -->
-    <View layout="LinearLayout" layout:orientation="horizontal" parent:weight="20">
+    <View layout="LinearLayout" layout:orientation="horizontal" parent:weight="30">
 
         <!-- Left panel -->
-        <View layout="LinearLayout" layout:orientation="vertical">
-            <Button parent:weight="0.3"/>
+        <Sprite layout="LinearLayout" layout:orientation="vertical" texture="media/textures/side_panels/left_panel.png">
+            <View parent:weight="0.3"/>
 
             <Pane>
-                <Tab name="Basic instruments" color="0xFFFDD0FF"
-                    layout="LinearLayout" layout:orientation="vertical">
-                    <Button name="Button 1" color="0xfffda0ff" id="4" />
-                    <Button name="Button 2" color="0xfffda0ff" id="5" />
-                    <Button name="Button 3" color="0xfffda0ff" id="6" />
+                <Tab name="Basic instruments" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="vertical"
+                    texture="media/textures/side_panels/Basic_instruments.jpeg">
+                    <Button name="Brush"   color="0xfffda0ff" id="4" texture="media/textures/side_panels/Brush.jpeg"/>
+                    <Button name="Pencil"  color="0xfffda0ff" id="5" texture="media/textures/side_panels/Pencil.jpeg"/>
+                    <Button name="Pipette" color="0xfffda0ff" id="6" texture="media/textures/side_panels/Pipette.jpeg"/>
                 </Tab>
             </Pane>
 
-            <Button parent:weight="0.3"/>
+            <View parent:weight="0.3"/>
 
             <Pane headWeight="1">
-                <Tab name="Move instruments" color="0xFFFDD0FF"
-                    layout="LinearLayout" layout:orientation="horizontal">
-                    <Button name="But1" color="0xfffda0ff" id="7" />
-                    <Button name="But2" color="0xfffda0ff" id="8" />
-                    <Button name="But3" color="0xfffda0ff" id="9" />
+                <Tab name="Move instruments" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="horizontal"
+                    texture="media/textures/side_panels/Move_instruments.jpeg">
+                    <Button name="Move"   color="0xfffda0ff" id="6" texture="media/textures/side_panels/Move.jpeg"/>
+                    <Button name="Select" color="0xfffda0ff" id="7" texture="media/textures/side_panels/Select.jpeg"/>
+                    <Button name="Cut"    color="0xfffda0ff" id="8" texture="media/textures/side_panels/Cut.jpeg"/>
                 </Tab>
             </Pane>
 
-            <Button parent:weight="0.3"/>
+            <View parent:weight="0.3"/>
 
             <Pane>
-                <Tab name="Share" color="0xFFFDD0FF"
-                    layout="LinearLayout" layout:orientation="vertical">
+                <Tab name="Share" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="vertical"
+                    texture="media/textures/side_panels/Share.jpeg">
                     <Button name="VK"       color="0xfffda0ff" id="10" />
                     <Button name="Facebook" color="0xfffda0ff" id="11" />
                     <Button name="Inst"     color="0xfffda0ff" id="12" />
                 </Tab>
             </Pane>
 
-            <Button parent:weight="0.3"/>
+            <View parent:weight="0.3"/>
 
             <Pane>
-                <Tab name="Histogram" color="0xFFFDD0FF"
-                    layout="LinearLayout" layout:orientation="vertical" >
+                <Tab name="Histogram" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="vertical" >
                     <Button name="Image here" color="0xF0E68Cff" id="13" parent:weight="3"/>
                     <Button name="" />
                 </Tab>
             </Pane>
-        </View>
+        </Sprite>
 
         <!-- Main image -->
-        <Button name="Image" parent:weight="3" color="0xF0E68Cff">
-        </Button>
+        <Sprite name="Image" parent:weight="3" color="0xF0E68Cff" texture="media/textures/image.png">
+        </Sprite>
 
         <!-- Right panel -->
-        <View layout="LinearLayout" layout:orientation="vertical">
-            <Button />
+        <Sprite layout="LinearLayout" layout:orientation="vertical" texture="media/textures/side_panels/right_panel.png">
+            <View parent:weight="0.3"/>
 
             <Pane headWeight="1" parent:weight="0.5">
-                <Tab name="Some pane" color="0xFFFDD0FF"
-                    layout="LinearLayout" layout:orientation="horizontal">
+                <Tab name="Some pane" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="horizontal">
                     <Button name="but1" color="0xfffda0ff" id="13" />
                     <Button name="but2" color="0xfffda0ff" id="14" />
                     <Button name="but3" color="0xfffda0ff" id="15" />
                 </Tab>
             </Pane>
 
-            <Button/>
+            <View parent:weight="0.3"/>
 
             <Pane>
-                <Tab name="History" color="0xFFFDD0FF"
-                    layout="LinearLayout" layout:orientation="vertical">
+                <Tab name="History" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="vertical">
                     <Button name="move rect" color="0xfffda0ff" id="16" />
                     <Button name="brush"     color="0xfffda0ff" id="17" />
                     <Button name="brush"     color="0xfffda0ff" id="18" />
                     <Button name="open file" color="0xfffda0ff" id="19" />
                 </Tab>
 
-                <Tab name="Colors" color="0xFFFDD0FF"
-                    layout="LinearLayout" layout:orientation="vertical">
+                <Tab name="Colors" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="vertical">
                     <Button name="Red"   color="0xff0000df" id="20" />
                     <Button name="Green" color="0x00ff00df" id="21" />
                     <Button name="Blue"  color="0x0000ffdf" id="22" />
                 </Tab>
             </Pane>
 
-            <Button parent:weight="0.3"/>
-        </View>
+            <View parent:weight="0.3"/>
+        </Sprite>
 
     </View>
 </View>
