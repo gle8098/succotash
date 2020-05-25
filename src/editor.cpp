@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <iostream> //debug
+
 namespace succotash {
 
 Editor::Editor()
@@ -29,6 +31,15 @@ void Editor::Run() {
           HandleClick(event.mouseButton);
         }
         break;
+
+      case sf::Event::Resized:
+        {
+          sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+          display_.setView(sf::View(visibleArea));
+          master_view_.Resize(
+              sf::Vector2f(event.size.width, event.size.height));
+          break;
+        }
 
       default:
         break;
