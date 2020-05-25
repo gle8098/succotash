@@ -48,10 +48,10 @@ bool View::IsPointWithinBounds(const sf::Vector2i& point) const {
 }
 
 void View::Draw(sf::RenderWindow& display) const {
+  DrawSelf(display);
   for (auto son : sons_) {
     son->Draw(display);
   }
-  DrawSelf(display);
 }
 
 // Sons.
