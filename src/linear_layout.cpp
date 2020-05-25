@@ -40,20 +40,17 @@ LinearLayout::LinearLayout(const XmlParams& params) {
 //------------------------------------------------------------------------------
 
 void LinearLayout::Place(const std::vector<View*>& views,
-                         const sf::RectangleShape& area) {
+                         const sf::FloatRect&& area) {
   float total_weight = GetTotalWeight(views);
 
-  auto area_pos  = area.getPosition();
-  auto area_size = area.getSize();
-
   size_t views_cnt = views.size();
-  sf::Vector2f new_pos(area_pos.x, area_pos.y);
+  sf::Vector2f new_pos(area.left, area.top);
 
   if (orientation_ == Type::Horizontal) {  // Put views in a row.
     for (size_t i = 0; i < views_cnt; ++i) {
       auto view = views[i];
       double weight_ratio = (double) GetWeight(view) / total_weight;
-      sf::Vector2f view_size(area_size.x * weight_ratio, area_size.y);
+      sf::Vector2f view_size(area.width * weight_ratio, area.height);
 
       view->MoveTo(new_pos);
       view->Resize(view_size);
@@ -63,7 +60,7 @@ void LinearLayout::Place(const std::vector<View*>& views,
     for (size_t i = 0; i < views_cnt; ++i) {
       auto view = views[i];
       double weight_ratio = (double) GetWeight(view) / total_weight;
-      sf::Vector2f view_size(area_size.x, area_size.y * weight_ratio);
+      sf::Vector2f view_size(area.width, area.height * weight_ratio);
 
       view->MoveTo(new_pos);
       view->Resize(view_size);

@@ -15,10 +15,10 @@ int main() {
 
   auto button_action = [](const Button* button) {
     std::cout << button->GetText().toAnsiString() <<  " pos: " <<
-              int(button->GetShape().getPosition().x) << "," <<
-              int(button->GetShape().getPosition().y) << " size: " <<
-              int(button->GetShape().getSize().x) << "," <<
-              int(button->GetShape().getSize().y) << std::endl;
+              int(button->GetRect().left) << "," <<
+              int(button->GetRect().top) << " size: " <<
+              int(button->GetRect().width) << "," <<
+              int(button->GetRect().height) << std::endl;
   };
 
   View* view = xml::ParseModel("models/main_window.xml");

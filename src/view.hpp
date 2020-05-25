@@ -42,7 +42,7 @@ public:
   /// Replace son by index.
   virtual void  SetSon(size_t index, View* new_son);
 
-  bool    IsPointWithinBounds(const sf::Vector2i& point) const;
+  bool  IsPointWithinBounds(const sf::Vector2i& point) const;
   View* HandleClick(const sf::Vector2i& click_pos);
 
   virtual void OnClickEvent(View* clicked_view);
@@ -55,11 +55,11 @@ public:
   void SetLayout(LayoutPtr layout);
   void SetDispositionParams(LayoutParamsPtr disposition_params);
 
-  int                       GetId()     const;
-  const LayoutPtr           GetLayout() const;
-  View*                     GetParent() const;
-  const std::vector<View*>& GetSons()   const;
-  sf::RectangleShape        GetShape()  const;
+  int                       GetId()                const;
+  const LayoutPtr           GetLayout()            const;
+  View*                     GetParent()            const;
+  const std::vector<View*>& GetSons()              const;
+  sf::FloatRect             GetRect()              const;
   const LayoutParamsPtr     GetDispositionParams() const;
 
   View* FindViewById(int id);
@@ -71,13 +71,14 @@ protected:
   virtual void DrawSelf(sf::RenderWindow& display) const;
 
 private:
+  // Used to solve a problem of base initializer and a delegation ctors.
   void Init();
   void UpdateSon(View* son);
 
 // === Data ===
 
 protected:
-  sf::RectangleShape shape_;
+  sf::FloatRect rect_;
   LayoutPtr layout_;
 
 private:

@@ -26,12 +26,6 @@ View::View(const Params& params) {
   }
 }
 
-View::~View() {
-  for (auto son: sons_) {
-    delete son;
-  }
-}
-
 void View::Init() {
   layout_ = CreatePtr<DefaultLayout>();
   parent_ = nullptr;
@@ -39,12 +33,18 @@ void View::Init() {
   disposition_params_ = nullptr;
 }
 
+View::~View() {
+  for (auto son: sons_) {
+    delete son;
+  }
+}
+
 //------------------------------------------------------------------------------
 // Public.
 //------------------------------------------------------------------------------
 
 bool View::IsPointWithinBounds(const sf::Vector2i& point) const {
-  return shape_.getGlobalBounds().contains(point.x, point.y);
+  return rect_.contains(point.x, point.y);
 }
 
 void View::Draw(sf::RenderWindow& display) const {
@@ -125,24 +125,20 @@ View* View::HandleClick(const sf::Vector2i& click_pos) {
 void View::OnClickEvent(View* clicked_view) { /* Virtual */ }
 
 void View::MoveTo(const sf::Vector2f& new_pos) {
-  auto offset = shape_.getPosition() - new_pos;
-
-  shape_.setPosition(new_pos);
-  for (auto son : sons_) {
-    son->MoveBy(offset);
-  }
+  MoveBy(sf::Vector2f(new_pos.x - rect_.left, new_pos.y - rect_.top));
 }
 
 void View::MoveBy(const sf::Vector2f& offset) {
-  shape_.move(offset);
-  for (auto son : sons_) {
+  rect_.left += offset.x;
+  rect_.top  += offset.y;
+  for (auto son : sons_) {  // We might use InvokeLayout, but it's faster.
     son->MoveBy(offset);
   }
 }
 
 void View::Resize(const sf::Vector2f& new_size) {
-  // Should it recursively Resize sons in case layout_ == nullptr?
-  shape_.setSize(new_size);
+  rect_.width  = new_size.x;
+  rect_.height = new_size.y;
   InvokeLayout(); // Layout will align sons.
 }
 
@@ -166,7 +162,7 @@ int                       View::GetId()     const { return id_;     }
 const LayoutPtr           View::GetLayout() const { return layout_; }
 View*                     View::GetParent() const { return parent_; }
 const std::vector<View*>& View::GetSons()   const { return sons_;   }
-sf::RectangleShape        View::GetShape()  const { return shape_;  }
+sf::FloatRect             View::GetRect()   const { return rect_;   }
 
 //------------------------------------------------------------------------------
 // Protected.
@@ -174,7 +170,7 @@ sf::RectangleShape        View::GetShape()  const { return shape_;  }
 
 void View::InvokeLayout() const {
   if (layout_) {
-    layout_->Place(sons_, shape_);
+    layout_->Place(sons_, GetRect());
   }
   for (auto son : sons_) {
     if (son != nullptr) {
@@ -183,7 +179,9 @@ void View::InvokeLayout() const {
   }
 }
 
-void View::DrawSelf(sf::RenderWindow& display) const { /* Virtual */ }
+void View::DrawSelf(sf::RenderWindow& display) const {
+  /* View is not drawable. */
+}
 
 void View::SetDispositionParams(LayoutParamsPtr disposition_params) {
   disposition_params_ = disposition_params;
