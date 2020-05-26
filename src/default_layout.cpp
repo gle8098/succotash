@@ -7,7 +7,7 @@
 namespace succotash {
 
 void DefaultLayout::Place(const std::vector<View*>& views,
-                          const sf::FloatRect&& area) {
+                          sf::FloatRect&& area) {
   if (views.size() > 1) {
     WARNING("default layout cannot handle more than one view");
   }

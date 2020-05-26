@@ -34,7 +34,7 @@ public:
   virtual ~Layout() = default;
 
   virtual void Place(const std::vector<View*>& views,
-                     const sf::FloatRect&& area) = 0;
+                     sf::FloatRect&& area) = 0;
 
   virtual LayoutParamsPtr CreateDefaultParams() const = 0;
   virtual bool AreParametersOfMyClass(const LayoutParamsPtr params) const = 0;

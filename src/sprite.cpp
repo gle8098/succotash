@@ -22,12 +22,12 @@ Sprite::Sprite(const Params& params)
     LoadTexture(it->second.ToString());
   }
   if ((it = params.find("color")) != params.end()) {
-    sprite_.setColor(sf::Color(it->second.ToInt()));
+    shape_.setFillColor(sf::Color(it->second.ToInt()));
   }
 }
 
 Sprite::~Sprite() {
-  delete sprite_.getTexture();  // tmp. It must be a TextureManager task.
+  delete shape_.getTexture();  // tmp. It must be a TextureManager task.
 }
 
 void Sprite::Init() {
@@ -42,17 +42,17 @@ void Sprite::LoadTexture(const sf::String& file) {
   if (!texture->loadFromFile(file)) {
     fprintf(stderr, "Error while loading texture\n");
   }
-  sprite_.setTexture(*texture);
+  shape_.setTexture(texture);
   UpdateSpriteSize(); // Important, since sprite might had rect_ != 0.
 }
 
 void Sprite::DrawSelf(sf::RenderWindow& display) const {
-  display.draw(sprite_);
+  display.draw(shape_);
 }
 
 void Sprite::MoveBy(const sf::Vector2f& offset) {
   View::MoveBy(offset);
-  sprite_.move(offset);
+  shape_.move(offset);
 }
 
 void Sprite::Resize(const sf::Vector2f& new_size) {
@@ -61,11 +61,10 @@ void Sprite::Resize(const sf::Vector2f& new_size) {
 }
 
 void Sprite::UpdateSpriteSize() {
-  auto new_rect = GetRect();
-  if (new_rect.width != 0 && new_rect.height != 0) {
-    auto old_rect = sprite_.getGlobalBounds();
-    sprite_.scale(
-        new_rect.width/old_rect.width, new_rect.height/old_rect.height);
+  auto rect = GetRect();
+  if (rect.width != 0 && rect.height != 0) {
+    shape_.setPosition(rect.left, rect.top);
+    shape_.setSize(sf::Vector2f(rect.width, rect.height));
   }
 }
 

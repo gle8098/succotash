@@ -27,6 +27,7 @@ View::View(const Params& params) {
 }
 
 void View::Init() {
+  rect_ = sf::FloatRect(0, 0, 0, 0);
   layout_ = CreatePtr<DefaultLayout>();
   parent_ = nullptr;
   id_ = 0;
@@ -77,9 +78,6 @@ bool View::RemoveSon(View* view) {
   if (it != sons_.end()) {
     delete *it;
     sons_.erase(it);
-    // old
-    //view->parent_ = nullptr;
-    //UpdateLayoutParams(view);
     InvokeLayout();
     return true;
   }
@@ -129,16 +127,24 @@ void View::MoveTo(const sf::Vector2f& new_pos) {
 }
 
 void View::MoveBy(const sf::Vector2f& offset) {
-  rect_.left += offset.x;
-  rect_.top  += offset.y;
+  if (offset.x == offset.x) {
+    rect_.left += offset.x;
+  }
+  if (offset.y == offset.y) {
+    rect_.top += offset.y;
+  }
   for (auto son : sons_) {  // We might use InvokeLayout, but it's faster.
     son->MoveBy(offset);
   }
 }
 
 void View::Resize(const sf::Vector2f& new_size) {
-  rect_.width  = new_size.x;
-  rect_.height = new_size.y;
+  if (new_size.x == new_size.x) { // Мы сидели и курили...
+    rect_.width  = new_size.x;
+  }
+  if (new_size.y == new_size.y) { // Nan check.
+    rect_.height = new_size.y;
+  }
   InvokeLayout(); // Layout will align sons.
 }
 

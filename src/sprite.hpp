@@ -23,7 +23,7 @@ private:
   void UpdateSpriteSize();
 
 private:
-  sf::Sprite sprite_;
+  sf::RectangleShape shape_;
 };
 
 } // succotash

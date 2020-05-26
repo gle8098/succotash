@@ -20,8 +20,7 @@ public:
   LinearLayout(Type orientation);
   LinearLayout(const XmlParams& xml_params);
 
-  void Place(const std::vector<View*>& views,
-             const sf::FloatRect&& area) override;
+  void Place(const std::vector<View*>& views, sf::FloatRect&& area) override;
   LayoutParamsPtr CreateDefaultParams() const override;
   bool AreParametersOfMyClass(const LayoutParamsPtr params) const override;
 
@@ -36,6 +35,8 @@ struct LinearLayoutParams : LayoutParams {
   LinearLayoutParams(const XmlParams& xml_params);
 
   float weight = 1.0;
+  float critical_width = 0;
+  float critical_height = 0;
 };
 
 using LinearLayoutPtr       = std::shared_ptr<LinearLayout>;

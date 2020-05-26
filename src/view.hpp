@@ -78,10 +78,10 @@ private:
 // === Data ===
 
 protected:
-  sf::FloatRect rect_;
   LayoutPtr layout_;
 
 private:
+  sf::FloatRect rect_;
   std::vector<View*> sons_;
   View* parent_;
   int id_;
