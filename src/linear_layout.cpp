@@ -21,12 +21,14 @@ float GetExpectedHeight(View* view, float area_height, float total_weight) {
   return area_height * GetWeight(view) / total_weight;
 }
 
-bool HasFixedWidth(View* view) {
-  return view->GetFixedSize().x != 0;
+bool IsCriticalWidth(View* view, float area_width, float total_weight) {
+  return GetExpectedWidth(view, area_width, total_weight) <
+         view->GetCriticalSize().x;
 }
 
-bool HasFixedHeight(View* view) {
-  return view->GetFixedSize().y != 0;
+bool IsCriticalHeight(View* view, float area_height, float total_weight) {
+  return GetExpectedHeight(view, area_height, total_weight) <
+         view->GetCriticalSize().y;
 }
 
 float GetTotalWeight(const std::vector<View*>& sons) {
@@ -38,23 +40,23 @@ float GetTotalWeight(const std::vector<View*>& sons) {
 }
 
 void UpdateWidth(
-    const std::vector<View*>& views, sf::FloatRect& area, float &total_weight) {
+    const std::vector<View*>& sons, sf::FloatRect& area, float &total_weight) {
 
-  for (auto view : views) {
-    if (HasFixedWidth(view)) {
-      area.width -= view->GetRect().width;
-      total_weight -= GetWeight(view);
+  for (auto son : sons) {
+    if (IsCriticalWidth(son, area.width, total_weight)) {
+      area.width -= son->GetRect().width;
+      total_weight -= GetWeight(son);
     }
   }
 }
 
 void UpdateHeight(
-    const std::vector<View*>& views, sf::FloatRect& area, float &total_weight) {
+    const std::vector<View*>& sons, sf::FloatRect& area, float &total_weight) {
 
-  for (auto view : views) {
-    if (HasFixedHeight(view)) {
-      area.height -= view->GetRect().height;
-      total_weight -= GetWeight(view);
+  for (auto son : sons) {
+    if (IsCriticalHeight(son, area.height, total_weight)) {
+      area.height -= son->GetRect().height;
+      total_weight -= GetWeight(son);
     }
   }
 }
@@ -92,11 +94,15 @@ void LinearLayout::Place(const std::vector<View*>& views,
       auto view = views[i];
 
       view->MoveTo(new_pos);
+      if (IsCriticalWidth(view, area.width, total_weight)) {
+        auto critical = view->GetCriticalSize().x;
+        new_pos.x += critical;
+        view->Resize(sf::Vector2f(critical, area.height));
 
-      if (HasFixedWidth(view)) {
-        auto fixed = view->GetFixedSize().x;
-        new_pos.x += fixed;
-        view->Resize(sf::Vector2f(fixed, area.height));
+      //printf("%.1f %.1f %.1f %.1f\n",
+      //    view->GetRect().left, view->GetRect().top,
+      //    view->GetRect().width, view->GetRect().height);
+
         continue;
       }
 
@@ -117,10 +123,10 @@ void LinearLayout::Place(const std::vector<View*>& views,
 
       view->MoveTo(new_pos);
 
-      if (HasFixedHeight(view)) {
-        auto fixed = view->GetFixedSize().y;
-        new_pos.y += fixed;
-        view->Resize(sf::Vector2f(area.width, fixed));
+      if (IsCriticalHeight(view, area.height, total_weight)) {
+        auto critical = view->GetCriticalSize().y;
+        new_pos.y += critical;
+        view->Resize(sf::Vector2f(area.width, critical));
         continue;
       }
 

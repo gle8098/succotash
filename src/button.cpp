@@ -54,9 +54,10 @@ void Button::SetString(const sf::String& string) {
   text_.setString(string);
 }
 
-//void Button::DrawSelf(sf::RenderWindow& display) const {
-//  //display.draw(text_);
-//}
+void Button::DrawSelf(sf::RenderWindow& display) const {
+  Sprite::DrawSelf(display);
+  display.draw(text_);
+}
 
 void Button::OnClickEvent(View* clicked_view) {
   if (action_) {
@@ -70,7 +71,7 @@ const sf::String& Button::GetText() const {
 
 void Button::MoveBy(const sf::Vector2f& offset) {
   Sprite::MoveBy(offset);
-  //text_.move(offset);
+  text_.move(offset);
 }
 
 void Button::Resize(const sf::Vector2f& new_size) {

@@ -21,7 +21,7 @@ public:
   void SetString(const sf::String& string);
   const sf::String& GetText() const;
 
-  //void DrawSelf(sf::RenderWindow& window) const override;
+  void DrawSelf(sf::RenderWindow& window) const override;
   void OnClickEvent(View* clicked_view)         override;
 
   void MoveBy(const sf::Vector2f& offset)   override;

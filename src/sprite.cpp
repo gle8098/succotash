@@ -18,11 +18,18 @@ Sprite::Sprite(const Params& params)
   Init();
 
   Params::const_iterator it;
+  bool txtr = false, clr = false;
   if ((it = params.find("texture")) != params.end()) {
     LoadTexture(it->second.ToString());
+    txtr = true;
   }
   if ((it = params.find("color")) != params.end()) {
     shape_.setFillColor(sf::Color(it->second.ToInt()));
+    clr = true;
+  }
+
+  if (clr && !txtr) {
+    //LoadTexture("media/textures/default.png");
   }
 }
 
@@ -66,6 +73,11 @@ void Sprite::UpdateSpriteSize() {
     shape_.setPosition(rect.left, rect.top);
     shape_.setSize(sf::Vector2f(rect.width, rect.height));
   }
+}
+
+void Sprite::SetTexture(const sf::Texture* texture) {
+  shape_.setTexture(texture);
+  UpdateSpriteSize(); // Important, since sprite might had rect_ != 0.
 }
 
 } // succotash

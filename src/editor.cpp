@@ -16,6 +16,7 @@ Editor::Editor()
 }
 
 void Editor::Run() {
+  sf::FloatRect visibleArea;
   while (display_.isOpen()) {
     sf::Event event;
 

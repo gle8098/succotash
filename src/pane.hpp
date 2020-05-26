@@ -21,6 +21,8 @@ public:
   void Activate()   { is_active_ = true; }
   void Deactivate() { is_active_ = false; }
 
+  sf::String texture_;
+
 private:
   void Init();
 
@@ -30,7 +32,7 @@ private:
 };
 
 
-class Pane : public View {
+class Pane : public Sprite {
 public:
   Pane();
   Pane(const Params& params);

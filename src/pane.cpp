@@ -26,6 +26,13 @@ Tab::Tab(const Params& params)
     : Button(params) {
   content_ = new View(params);
   is_active_ = false;
+  shape_.setTexture(nullptr);
+  shape_.setFillColor(sf::Color::Transparent);
+
+  Params::const_iterator it;
+  if ((it = params.find("texture")) != params.end()) {
+    texture_ = it->second.ToString();
+  }
 }
 
 void Tab::Init() {
@@ -64,7 +71,7 @@ Pane::~Pane() {
 }
 
 Pane::Pane(const Params& params)
-    : View(params) {
+    : Sprite(params) {
   Init();
 
   Params::const_iterator it;
@@ -78,7 +85,7 @@ void Pane::Init() {
   content_id_ = 1;
   active_tab_ = nullptr;
 
-  auto head = new View;
+  auto head = new Sprite;
   auto content = new View;
 
   // Head
@@ -120,6 +127,7 @@ void Pane::SwitchTab(Tab* tab) {
   active_tab_ = tab;
   active_tab_->Activate();
   GetSon(content_id_)->SetSon(0, tab->GetContent());
+  ((Sprite*) GetSon(0))->LoadTexture(active_tab_->texture_);
 }
 
 void Pane::SetHeadWeight(float weight) {

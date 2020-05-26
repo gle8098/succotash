@@ -1,9 +1,9 @@
 <View layout="LinearLayout" layout:orientation="vertical">
     <!-- Menubar -->
-    <Sprite layout="LinearLayout" layout:orientation="horizontal" parent:weight="1" texture="media/textures/menubar/menubar.png" fixedHeight="20">
-        <Button name="File" color="0xFFFDD0FF" id ="1" texture="media/textures/button1.png" fixedWidth="50"/>
-        <Button name="Edit" color="0xFFFDD0FF" id ="2" texture="media/textures/button1.png" fixedWidth="100"/>
-        <Button name="Help" color="0xFFFDD0FF" id ="3" texture="media/textures/button1.png" fixedWidth="50"/>
+    <Sprite layout="LinearLayout" layout:orientation="horizontal" parent:weight="1" texture="media/textures/menubar/menubar.png">
+        <Button name="File" color="0xFFFDD0FF" id ="1" texture="media/textures/button1.png" criticalWidth="50" criticalHeight="20"/>
+        <Button name="Edit" color="0xFFFDD0FF" id ="2" texture="media/textures/button1.png" criticalWidth="50" criticalHeight="20"/>
+        <Button name="Help" color="0xFFFDD0FF" id ="3" texture="media/textures/button1.png" criticalWidth="50" criticalHeight="20"/>
         <!-- Layout empty -->
         <View parent:weight="20"/>
     </Sprite>
@@ -16,10 +16,10 @@
 
             <Pane>
                 <Tab name="Basic instruments" color="0xFFFDD0FF" layout="LinearLayout" layout:orientation="vertical"
-                    texture="media/textures/side_panels/Basic_instruments.jpeg">
-                    <Button name="Brush"   color="0xfffda0ff" id="4" texture="media/textures/side_panels/Brush.jpeg"  />
-                    <Button name="Pencil"  color="0xfffda0ff" id="5" texture="media/textures/side_panels/Pencil.jpeg" />
-                    <Button name="Pipette" color="0xfffda0ff" id="6" texture="media/textures/side_panels/Pipette.jpeg"/>
+                    texture="media/textures/side_panels/Basic_instruments.jpeg" criticalWidth="200">
+                    <Button name="Brush"   color="0xfffda0ff" id="4" texture="media/textures/side_panels/Brush.jpeg"   criticalWidth="50" criticalHeight="20"/>
+                    <Button name="Pencil"  color="0xfffda0ff" id="5" texture="media/textures/side_panels/Pencil.jpeg"  criticalWidth="50" criticalHeight="20"/>
+                    <Button name="Pipette" color="0xfffda0ff" id="6" texture="media/textures/side_panels/Pipette.jpeg" criticalWidth="50" criticalHeight="20"/>
                 </Tab>
             </Pane>
 

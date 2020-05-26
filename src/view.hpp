@@ -52,10 +52,10 @@ public:
   void SetId(int id);
   void SetLayout(LayoutPtr layout);
   void SetDispositionParams(LayoutParamsPtr disposition_params);
-  void SetFixedSize(const sf::Vector2f& fixed_size);
+  void SetCriticalSize(const sf::Vector2f& critical_size);
 
-  void UpdateFixedSize(const sf::Vector2f& fixed_size);
-  void DeleteFixedSize(const sf::Vector2f& fixed_size);
+  void UpdateCriticalSize(const sf::Vector2f& critical_size);
+  void DeleteCriticalSize(const sf::Vector2f& critical_size);
 
   int                       GetId()                const;
   const LayoutPtr           GetLayout()            const;
@@ -63,8 +63,7 @@ public:
   const std::vector<View*>& GetSons()              const;
   sf::FloatRect             GetRect()              const;
   const LayoutParamsPtr     GetDispositionParams() const;
-  /// GetFixedSize() == {0, 0} <==> size not fixed.
-  sf::Vector2f              GetFixedSize()         const;
+  sf::Vector2f              GetCriticalSize()      const;
 
   View* FindViewById(int id);
 
@@ -90,7 +89,7 @@ private:
   View* parent_;
   int id_;
   LayoutParamsPtr disposition_params_;
-  sf::Vector2f fixed_size_;
+  sf::Vector2f critical_size_;
 };
 
 } // succotash

@@ -12,6 +12,7 @@ public:
   ~Sprite();
 
   void LoadTexture(const sf::String& string);
+  void SetTexture(const sf::Texture* texture);
 
   void DrawSelf(sf::RenderWindow& window) const override;
 
@@ -22,7 +23,7 @@ private:
   void Init();
   void UpdateSpriteSize();
 
-private:
+ protected:
   sf::RectangleShape shape_;
 };
 
