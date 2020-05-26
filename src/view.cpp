@@ -25,23 +25,24 @@ View::View(const Params& params) {
     SetId(it->second.ToInt());
   }
 
-  sf::Vector2f critical_size(0, 0);
-  if ((it = params.find("criticalWidth")) != params.end()) {
-    critical_size.x = it->second.ToFloat();
+  sf::Vector2f fixed_size(0, 0);
+  if ((it = params.find("fixedWidth")) != params.end()) {
+    fixed_size.x = it->second.ToFloat();
   }
-  if ((it = params.find("criticalHeight")) != params.end()) {
-    critical_size.y = it->second.ToFloat();
+  if ((it = params.find("fixedHeight")) != params.end()) {
+    fixed_size.y = it->second.ToFloat();
   }
-  SetCriticalSize(critical_size);
+  SetFixedSize(fixed_size);
+  Resize(fixed_size);
 }
 
 void View::Init() {
-  rect_ = sf::FloatRect(0, 0, 0, 0);
+  rect_ = {0, 0, 0, 0};
   layout_ = CreatePtr<DefaultLayout>();
   parent_ = nullptr;
   id_ = 0;
   disposition_params_ = nullptr;
-  critical_size_ = {0, 0};
+  fixed_size_ = {0, 0};
 }
 
 View::~View() {
@@ -75,7 +76,7 @@ void View::InsertSonBefore(std::vector<View*>::const_iterator position,
                            View* view) {
   sons_.insert(position, view);
   UpdateSon(view);
-  UpdateCriticalSize(view->GetCriticalSize());
+  UpdateFixedSize(view->GetFixedSize());
 }
 
 bool View::RemoveSon(View* view) {
@@ -198,64 +199,64 @@ void View::SetDispositionParams(LayoutParamsPtr disposition_params) {
   disposition_params_ = disposition_params;
 }
 
-void View::SetCriticalSize(const sf::Vector2f& critical_size) {
-  critical_size_ = critical_size;
+void View::SetFixedSize(const sf::Vector2f& fixed_size) {
+  fixed_size_ = fixed_size;
   if (GetParent() != nullptr) {
-    GetParent()->UpdateCriticalSize(critical_size_);
+    GetParent()->UpdateFixedSize(fixed_size_);
   }
 }
 
-void View::UpdateCriticalSize(const sf::Vector2f& critical_size) {
+void View::UpdateFixedSize(const sf::Vector2f& fixed_size) {
   bool size_updated = false;
 
-  if (critical_size_.x < critical_size.x) {
-    critical_size_.x = critical_size.x;
+  if (fixed_size_.x < fixed_size.x) {
+    fixed_size_.x = fixed_size.x;
     size_updated = true;
   }
-  if (critical_size_.y < critical_size.y) {
-    critical_size_.y = critical_size.y;
+  if (fixed_size_.y < fixed_size.y) {
+    fixed_size_.y = fixed_size.y;
     size_updated = true;
   }
 
   if (size_updated && GetParent() != nullptr) {
-    GetParent()->UpdateCriticalSize(critical_size_);
+    GetParent()->UpdateFixedSize(fixed_size_);
   }
 }
 
-void View::DeleteCriticalSize(const sf::Vector2f& critical_size) {
+void View::DeleteFixedSize(const sf::Vector2f& fixed_size) {
   bool size_updated = false;
 
-  if (critical_size_.x == critical_size.x) {  // Potential "bottle neck" son.
-    critical_size_.x = 0;
+  if (fixed_size_.x == fixed_size.x) {  // Potential "bottle neck" son.
+    fixed_size_.x = 0;
     for (auto son : sons_) {
-      auto son_critical_size = son->GetCriticalSize();
+      auto son_fixed_size = son->GetFixedSize();
       // Search for smallest x size of sons.
-      if (critical_size_.x < son_critical_size.x || critical_size_.x == 0) {
-        critical_size_.x = son_critical_size.x;
+      if (fixed_size_.x < son_fixed_size.x || fixed_size_.x == 0) {
+        fixed_size_.x = son_fixed_size.x;
       }
     }
-    ASSERT(critical_size_.x <= critical_size.x);
-    if (critical_size_.x != critical_size.x) {
+    ASSERT(fixed_size_.x <= fixed_size.x);
+    if (fixed_size_.x != fixed_size.x) {
       size_updated = true;
     }
   }
-  if (critical_size_.y < critical_size.y) {
-    critical_size_.y = 0;
+  if (fixed_size_.y < fixed_size.y) {
+    fixed_size_.y = 0;
     for (auto son : sons_) {
-      auto son_critical_size = son->GetCriticalSize();
+      auto son_fixed_size = son->GetFixedSize();
 
-      if (critical_size_.y < son_critical_size.y || critical_size_.y == 0) {
-        critical_size_.y = son_critical_size.y;
+      if (fixed_size_.y < son_fixed_size.y || fixed_size_.y == 0) {
+        fixed_size_.y = son_fixed_size.y;
       }
     }
-    ASSERT(critical_size_.y <= critical_size.y);
-    if (critical_size_.y != critical_size.y) {
+    ASSERT(fixed_size_.y <= fixed_size.y);
+    if (fixed_size_.y != fixed_size.y) {
       size_updated = true;
     }
   }
 
   if (size_updated && GetParent() != nullptr) {
-    GetParent()->DeleteCriticalSize(critical_size);
+    GetParent()->DeleteFixedSize(fixed_size);
   }
 }
 
@@ -263,8 +264,8 @@ const LayoutParamsPtr View::GetDispositionParams() const {
   return disposition_params_;
 }
 
-sf::Vector2f View::GetCriticalSize() const {
-  return critical_size_;
+sf::Vector2f View::GetFixedSize() const {
+  return fixed_size_;
 }
 
 View* View::FindViewById(int id) {
