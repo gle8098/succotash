@@ -24,6 +24,15 @@ View::View(const Params& params) {
   if ((it = params.find("id")) != params.end()) {
     SetId(it->second.ToInt());
   }
+
+  sf::Vector2f critical_size(0, 0);
+  if ((it = params.find("criticalWidth")) != params.end()) {
+    critical_size.x = it->second.ToFloat();
+  }
+  if ((it = params.find("criticalHeight")) != params.end()) {
+    critical_size.y = it->second.ToFloat();
+  }
+  SetCriticalSize(critical_size);
 }
 
 void View::Init() {
@@ -32,6 +41,7 @@ void View::Init() {
   parent_ = nullptr;
   id_ = 0;
   disposition_params_ = nullptr;
+  critical_size_ = {0, 0};
 }
 
 View::~View() {
@@ -57,20 +67,15 @@ void View::Draw(sf::RenderWindow& display) const {
 
 // Sons.
 
-void View::ReserveSons(size_t count) {
-  ASSERT(sons_.size() <= count);
-  sons_.resize(count, nullptr);
-}
-
 void View::AddSon(View* view) {
-  sons_.push_back(view);
-  UpdateSon(view);
+  InsertSonBefore(sons_.end(), view);
 }
 
 void View::InsertSonBefore(std::vector<View*>::const_iterator position,
                            View* view) {
   sons_.insert(position, view);
   UpdateSon(view);
+  UpdateCriticalSize(view->GetCriticalSize());
 }
 
 bool View::RemoveSon(View* view) {
@@ -127,7 +132,7 @@ void View::MoveTo(const sf::Vector2f& new_pos) {
 }
 
 void View::MoveBy(const sf::Vector2f& offset) {
-  if (offset.x == offset.x) {
+  if (offset.x == offset.x) { // Nan check.
     rect_.left += offset.x;
   }
   if (offset.y == offset.y) {
@@ -139,10 +144,10 @@ void View::MoveBy(const sf::Vector2f& offset) {
 }
 
 void View::Resize(const sf::Vector2f& new_size) {
-  if (new_size.x == new_size.x) { // Мы сидели и курили...
+  if (new_size.x == new_size.x) {
     rect_.width  = new_size.x;
   }
-  if (new_size.y == new_size.y) { // Nan check.
+  if (new_size.y == new_size.y) {
     rect_.height = new_size.y;
   }
   InvokeLayout(); // Layout will align sons.
@@ -193,8 +198,73 @@ void View::SetDispositionParams(LayoutParamsPtr disposition_params) {
   disposition_params_ = disposition_params;
 }
 
+void View::SetCriticalSize(const sf::Vector2f& critical_size) {
+  critical_size_ = critical_size;
+  if (GetParent() != nullptr) {
+    GetParent()->UpdateCriticalSize(critical_size_);
+  }
+}
+
+void View::UpdateCriticalSize(const sf::Vector2f& critical_size) {
+  bool size_updated = false;
+
+  if (critical_size_.x < critical_size.x) {
+    critical_size_.x = critical_size.x;
+    size_updated = true;
+  }
+  if (critical_size_.y < critical_size.y) {
+    critical_size_.y = critical_size.y;
+    size_updated = true;
+  }
+
+  if (size_updated && GetParent() != nullptr) {
+    GetParent()->UpdateCriticalSize(critical_size_);
+  }
+}
+
+void View::DeleteCriticalSize(const sf::Vector2f& critical_size) {
+  bool size_updated = false;
+
+  if (critical_size_.x == critical_size.x) {  // Potential "bottle neck" son.
+    critical_size_.x = 0;
+    for (auto son : sons_) {
+      auto son_critical_size = son->GetCriticalSize();
+      // Search for smallest x size of sons.
+      if (critical_size_.x < son_critical_size.x || critical_size_.x == 0) {
+        critical_size_.x = son_critical_size.x;
+      }
+    }
+    ASSERT(critical_size_.x <= critical_size.x);
+    if (critical_size_.x != critical_size.x) {
+      size_updated = true;
+    }
+  }
+  if (critical_size_.y < critical_size.y) {
+    critical_size_.y = 0;
+    for (auto son : sons_) {
+      auto son_critical_size = son->GetCriticalSize();
+
+      if (critical_size_.y < son_critical_size.y || critical_size_.y == 0) {
+        critical_size_.y = son_critical_size.y;
+      }
+    }
+    ASSERT(critical_size_.y <= critical_size.y);
+    if (critical_size_.y != critical_size.y) {
+      size_updated = true;
+    }
+  }
+
+  if (size_updated && GetParent() != nullptr) {
+    GetParent()->DeleteCriticalSize(critical_size);
+  }
+}
+
 const LayoutParamsPtr View::GetDispositionParams() const {
   return disposition_params_;
+}
+
+sf::Vector2f View::GetCriticalSize() const {
+  return critical_size_;
 }
 
 View* View::FindViewById(int id) {

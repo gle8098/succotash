@@ -173,7 +173,7 @@ View* Parser::ParseModelRecursive(const pugi::xml_node& tag,
     view->SetDispositionParams(params);
   }
 
-  // 4.
+  // 4. Construct children.
   for (auto child : tag.children()) {
     View* son;
     if (my_params_factory) {

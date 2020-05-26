@@ -32,8 +32,6 @@ public:
 
   void Draw(sf::RenderWindow& display) const;
 
-  /// Resize sons_ array to count sons.
-  void ReserveSons(size_t count);
   virtual void AddSon(View* view);
   virtual void InsertSonBefore(std::vector<View*>::const_iterator position,
                                View* view);
@@ -54,6 +52,10 @@ public:
   void SetId(int id);
   void SetLayout(LayoutPtr layout);
   void SetDispositionParams(LayoutParamsPtr disposition_params);
+  void SetCriticalSize(const sf::Vector2f& critical_size);
+
+  void UpdateCriticalSize(const sf::Vector2f& critical_size);
+  void DeleteCriticalSize(const sf::Vector2f& critical_size);
 
   int                       GetId()                const;
   const LayoutPtr           GetLayout()            const;
@@ -61,6 +63,7 @@ public:
   const std::vector<View*>& GetSons()              const;
   sf::FloatRect             GetRect()              const;
   const LayoutParamsPtr     GetDispositionParams() const;
+  sf::Vector2f              GetCriticalSize()      const;
 
   View* FindViewById(int id);
 
@@ -86,6 +89,7 @@ private:
   View* parent_;
   int id_;
   LayoutParamsPtr disposition_params_;
+  sf::Vector2f critical_size_;
 };
 
 } // succotash

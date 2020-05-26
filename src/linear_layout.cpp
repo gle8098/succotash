@@ -13,18 +13,6 @@ float GetWeight(View* view) {
   return params->weight;
 }
 
-float GetCriticalWidth(View* view) {
-  auto params = std::dynamic_pointer_cast<LinearLayoutParams>(
-      view->GetDispositionParams());
-  return params->critical_width;
-}
-
-float GetCriticalHeight(View* view) {
-  auto params = std::dynamic_pointer_cast<LinearLayoutParams>(
-      view->GetDispositionParams());
-  return params->critical_height;
-}
-
 float GetExpectedWidth(View* view, float area_width, float total_weight) {
   return area_width * GetWeight(view) / total_weight;
 }
@@ -35,12 +23,12 @@ float GetExpectedHeight(View* view, float area_height, float total_weight) {
 
 bool IsCriticalWidth(View* view, float area_width, float total_weight) {
   return GetExpectedWidth(view, area_width, total_weight) <
-         GetCriticalWidth(view);
+         view->GetCriticalSize().x;
 }
 
 bool IsCriticalHeight(View* view, float area_height, float total_weight) {
   return GetExpectedHeight(view, area_height, total_weight) <
-         GetCriticalHeight(view);
+         view->GetCriticalSize().y;
 }
 
 float GetTotalWeight(const std::vector<View*>& sons) {
@@ -105,20 +93,15 @@ void LinearLayout::Place(const std::vector<View*>& views,
     for (size_t i = 0; i < views_cnt; ++i) {
       auto view = views[i];
 
-      if (area.width > 0 && views.size() > 2) {
-        int a;
-        a += 5;
-      }
-
       view->MoveTo(new_pos);
       if (IsCriticalWidth(view, area.width, total_weight)) {
-        auto critical = GetCriticalWidth(view);
+        auto critical = view->GetCriticalSize().x;
         new_pos.x += critical;
         view->Resize(sf::Vector2f(critical, area.height));
 
-      printf("%.1f %.1f %.1f %.1f\n",
-          view->GetRect().left, view->GetRect().top,
-          view->GetRect().width, view->GetRect().height);
+      //printf("%.1f %.1f %.1f %.1f\n",
+      //    view->GetRect().left, view->GetRect().top,
+      //    view->GetRect().width, view->GetRect().height);
 
         continue;
       }
@@ -127,9 +110,9 @@ void LinearLayout::Place(const std::vector<View*>& views,
           GetExpectedWidth(view, area.width, total_weight), area.height);
 
       view->Resize(view_size);
-      printf("%.1f %.1f %.1f %.1f\n",
-          view->GetRect().left, view->GetRect().top,
-          view->GetRect().width, view->GetRect().height);
+      //printf("%.1f %.1f %.1f %.1f\n",
+      //    view->GetRect().left, view->GetRect().top,
+      //    view->GetRect().width, view->GetRect().height);
       new_pos.x += view_size.x;
     }
   } else {  // Put views in a column.
@@ -141,8 +124,8 @@ void LinearLayout::Place(const std::vector<View*>& views,
       view->MoveTo(new_pos);
 
       if (IsCriticalHeight(view, area.height, total_weight)) {
-        auto critical = GetCriticalHeight(view);
-        new_pos.y += GetCriticalHeight(view);
+        auto critical = view->GetCriticalSize().y;
+        new_pos.y += critical;
         view->Resize(sf::Vector2f(area.width, critical));
         continue;
       }
@@ -167,16 +150,6 @@ LinearLayoutParams::LinearLayoutParams(const XmlParams& params) {
   auto it = params.find("weight");
   if (it != params.end()) {
     weight = it->second.ToFloat();
-  }
-
-  it = params.find("criticalWidth");
-  if (it != params.end()) {
-    critical_width = it->second.ToFloat();
-  }
-
-  it = params.find("criticalHeight");
-  if (it != params.end()) {
-    critical_height = it->second.ToFloat();
   }
 }
 
