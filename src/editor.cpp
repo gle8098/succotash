@@ -2,18 +2,21 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <iostream> //debug
+
 namespace succotash {
 
 Editor::Editor()
-    : display_(sf::VideoMode(800, 600), "Succotash") {
+    : display_(sf::VideoMode(1920, 1080), "Succotash") {
 
   display_.setFramerateLimit(50);
 
   master_view_.MoveTo(sf::Vector2f(0, 0));
-  master_view_.Resize(sf::Vector2f(800, 600));  // tmp
+  master_view_.Resize(sf::Vector2f(display_.getSize()));
 }
 
 void Editor::Run() {
+  sf::FloatRect visibleArea;
   while (display_.isOpen()) {
     sf::Event event;
 
@@ -29,6 +32,15 @@ void Editor::Run() {
           HandleClick(event.mouseButton);
         }
         break;
+
+      case sf::Event::Resized:
+        {
+          sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+          display_.setView(sf::View(visibleArea));
+          master_view_.Resize(
+              sf::Vector2f(event.size.width, event.size.height));
+          break;
+        }
 
       default:
         break;

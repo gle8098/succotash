@@ -32,8 +32,6 @@ public:
 
   void Draw(sf::RenderWindow& display) const;
 
-  /// Resize sons_ array to count sons.
-  void ReserveSons(size_t count);
   virtual void AddSon(View* view);
   virtual void InsertSonBefore(std::vector<View*>::const_iterator position,
                                View* view);
@@ -42,7 +40,7 @@ public:
   /// Replace son by index.
   virtual void  SetSon(size_t index, View* new_son);
 
-  bool    IsPointWithinBounds(const sf::Vector2i& point) const;
+  bool  IsPointWithinBounds(const sf::Vector2i& point) const;
   View* HandleClick(const sf::Vector2i& click_pos);
 
   virtual void OnClickEvent(View* clicked_view);
@@ -54,13 +52,18 @@ public:
   void SetId(int id);
   void SetLayout(LayoutPtr layout);
   void SetDispositionParams(LayoutParamsPtr disposition_params);
+  void SetCriticalSize(const sf::Vector2f& critical_size);
 
-  int                       GetId()     const;
-  const LayoutPtr           GetLayout() const;
-  View*                     GetParent() const;
-  const std::vector<View*>& GetSons()   const;
-  sf::RectangleShape        GetShape()  const;
+  void UpdateCriticalSize(const sf::Vector2f& critical_size);
+  void DeleteCriticalSize(const sf::Vector2f& critical_size);
+
+  int                       GetId()                const;
+  const LayoutPtr           GetLayout()            const;
+  View*                     GetParent()            const;
+  const std::vector<View*>& GetSons()              const;
+  sf::FloatRect             GetRect()              const;
   const LayoutParamsPtr     GetDispositionParams() const;
+  sf::Vector2f              GetCriticalSize()      const;
 
   View* FindViewById(int id);
 
@@ -71,20 +74,22 @@ protected:
   virtual void DrawSelf(sf::RenderWindow& display) const;
 
 private:
+  // Used to solve a problem of base initializer and a delegation ctors.
   void Init();
   void UpdateSon(View* son);
 
 // === Data ===
 
 protected:
-  sf::RectangleShape shape_;
   LayoutPtr layout_;
 
 private:
+  sf::FloatRect rect_;
   std::vector<View*> sons_;
   View* parent_;
   int id_;
   LayoutParamsPtr disposition_params_;
+  sf::Vector2f critical_size_;
 };
 
 } // succotash

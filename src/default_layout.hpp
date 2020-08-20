@@ -10,8 +10,7 @@ namespace succotash {
 
 class DefaultLayout : public Layout {
 public:
-  void Place(const std::vector<View*>& views,
-             const sf::RectangleShape& area) override;
+  void Place(const std::vector<View*>& views, sf::FloatRect&& area) override;
 
   LayoutParamsPtr CreateDefaultParams() const override;
   bool AreParametersOfMyClass(const LayoutParamsPtr params) const override;

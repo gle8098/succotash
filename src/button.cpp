@@ -12,30 +12,34 @@ namespace succotash {
 // Ctors.
 //------------------------------------------------------------------------------
 
-Button::Button(const Params& params)
-    : View(params) {
+Button::Button() {
+  Init();
+}
 
-  Init(params.at("name").ToString());
+Button::Button(const Params& params)
+    : Sprite(params) {
+  Init();
+
+  Params::const_iterator it;
+  if ((it = params.find("name")) != params.end()) {
+    SetString(it->second.ToString());
+  }
 }
 
 Button::Button(const sf::String& string) {
-  Init(string);
+  Init();
+  SetString(string);
 }
 
 Button::Button(const sf::String& string,
-               std::function<void(const Button*)> action) {
-  Init(string);
+               std::function<void(const Button*)> action)
+    : Button(string) {
   SetAction(action);
 }
 
-void Button::Init(const sf::String& string) {
-  text_.setString(string);
+void Button::Init() {
   text_.setFont(GetDefaultFont());
   text_.setFillColor(sf::Color::Black);
-
-  shape_.setFillColor(sf::Color::White);
-  shape_.setOutlineColor(sf::Color::Red);
-  shape_.setOutlineThickness(3);
 }
 
 //------------------------------------------------------------------------------
@@ -46,8 +50,12 @@ void Button::SetAction(std::function<void(const Button*)> action) {
   action_ = std::move(action);
 }
 
+void Button::SetString(const sf::String& string) {
+  text_.setString(string);
+}
+
 void Button::DrawSelf(sf::RenderWindow& display) const {
-  display.draw(shape_);
+  Sprite::DrawSelf(display);
   display.draw(text_);
 }
 
@@ -61,14 +69,14 @@ const sf::String& Button::GetText() const {
   return text_.getString();
 }
 
-void Button::MoveTo(const sf::Vector2f& new_pos) {
-  View::MoveTo(new_pos);
-  text_.setPosition(shape_.getPosition());
+void Button::MoveBy(const sf::Vector2f& offset) {
+  Sprite::MoveBy(offset);
+  text_.move(offset);
 }
 
 void Button::Resize(const sf::Vector2f& new_size) {
-  View::Resize(new_size);
-  //text_.setSize(shape_.getSize());
+  Sprite::Resize(new_size);
+  //text_.setSize(sprite_.getSize());
 }
 
 } // succotash

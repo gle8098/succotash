@@ -20,9 +20,28 @@ View::View() {
 View::View(const Params& params) {
   Init();
 
-  if (params.find("id") != params.end()) {
-    SetId(params.at("id").ToInt());
+  Params::const_iterator it;
+  if ((it = params.find("id")) != params.end()) {
+    SetId(it->second.ToInt());
   }
+
+  sf::Vector2f critical_size(0, 0);
+  if ((it = params.find("criticalWidth")) != params.end()) {
+    critical_size.x = it->second.ToFloat();
+  }
+  if ((it = params.find("criticalHeight")) != params.end()) {
+    critical_size.y = it->second.ToFloat();
+  }
+  SetCriticalSize(critical_size);
+}
+
+void View::Init() {
+  rect_ = sf::FloatRect(0, 0, 0, 0);
+  layout_ = CreatePtr<DefaultLayout>();
+  parent_ = nullptr;
+  id_ = 0;
+  disposition_params_ = nullptr;
+  critical_size_ = {0, 0};
 }
 
 View::~View() {
@@ -31,44 +50,32 @@ View::~View() {
   }
 }
 
-void View::Init() {
-  layout_ = CreatePtr<DefaultLayout>();
-  parent_ = nullptr;
-  id_ = 0;
-  disposition_params_ = nullptr;
-}
-
 //------------------------------------------------------------------------------
 // Public.
 //------------------------------------------------------------------------------
 
 bool View::IsPointWithinBounds(const sf::Vector2i& point) const {
-  return shape_.getGlobalBounds().contains(point.x, point.y);
+  return rect_.contains(point.x, point.y);
 }
 
 void View::Draw(sf::RenderWindow& display) const {
+  DrawSelf(display);
   for (auto son : sons_) {
     son->Draw(display);
   }
-  DrawSelf(display);
 }
 
 // Sons.
 
-void View::ReserveSons(size_t count) {
-  ASSERT_WARN(sons_.size() <= count);
-  sons_.resize(count, nullptr);
-}
-
 void View::AddSon(View* view) {
-  sons_.push_back(view);
-  UpdateSon(view);
+  InsertSonBefore(sons_.end(), view);
 }
 
 void View::InsertSonBefore(std::vector<View*>::const_iterator position,
                            View* view) {
   sons_.insert(position, view);
   UpdateSon(view);
+  UpdateCriticalSize(view->GetCriticalSize());
 }
 
 bool View::RemoveSon(View* view) {
@@ -76,9 +83,6 @@ bool View::RemoveSon(View* view) {
   if (it != sons_.end()) {
     delete *it;
     sons_.erase(it);
-    // old
-    //view->parent_ = nullptr;
-    //UpdateLayoutParams(view);
     InvokeLayout();
     return true;
   }
@@ -86,15 +90,18 @@ bool View::RemoveSon(View* view) {
 }
 
 View* View::GetSon(size_t index) const {
-  ASSERT_WARN(index < sons_.size());
+  ASSERT(index < sons_.size());
 
   return sons_[index];
 }
 
 void View::SetSon(size_t index, View* new_son) {
-  ASSERT_WARN(index < sons_.size());
+  if (sons_[index] == new_son) {
+    return;
+  }
 
-  delete sons_[index];
+  ASSERT(index < sons_.size());
+  //delete sons_[index];        This line breaks program.
 
   sons_[index] = new_son;
   UpdateSon(new_son);
@@ -121,24 +128,28 @@ View* View::HandleClick(const sf::Vector2i& click_pos) {
 void View::OnClickEvent(View* clicked_view) { /* Virtual */ }
 
 void View::MoveTo(const sf::Vector2f& new_pos) {
-  auto offset = shape_.getPosition() - new_pos;
-
-  shape_.setPosition(new_pos);
-  for (auto son : sons_) {
-    son->MoveBy(offset);
-  }
+  MoveBy(sf::Vector2f(new_pos.x - rect_.left, new_pos.y - rect_.top));
 }
 
 void View::MoveBy(const sf::Vector2f& offset) {
-  shape_.move(offset);
-  for (auto son : sons_) {
+  if (offset.x == offset.x) { // Nan check.
+    rect_.left += offset.x;
+  }
+  if (offset.y == offset.y) {
+    rect_.top += offset.y;
+  }
+  for (auto son : sons_) {  // We might use InvokeLayout, but it's faster.
     son->MoveBy(offset);
   }
 }
 
 void View::Resize(const sf::Vector2f& new_size) {
-  // Should it recursively Resize sons in case layout_ == nullptr?
-  shape_.setSize(new_size);
+  if (new_size.x == new_size.x) {
+    rect_.width  = new_size.x;
+  }
+  if (new_size.y == new_size.y) {
+    rect_.height = new_size.y;
+  }
   InvokeLayout(); // Layout will align sons.
 }
 
@@ -162,7 +173,7 @@ int                       View::GetId()     const { return id_;     }
 const LayoutPtr           View::GetLayout() const { return layout_; }
 View*                     View::GetParent() const { return parent_; }
 const std::vector<View*>& View::GetSons()   const { return sons_;   }
-sf::RectangleShape        View::GetShape()  const { return shape_;  }
+sf::FloatRect             View::GetRect()   const { return rect_;   }
 
 //------------------------------------------------------------------------------
 // Protected.
@@ -170,7 +181,7 @@ sf::RectangleShape        View::GetShape()  const { return shape_;  }
 
 void View::InvokeLayout() const {
   if (layout_) {
-    layout_->Place(sons_, shape_);
+    layout_->Place(sons_, GetRect());
   }
   for (auto son : sons_) {
     if (son != nullptr) {
@@ -179,14 +190,81 @@ void View::InvokeLayout() const {
   }
 }
 
-void View::DrawSelf(sf::RenderWindow& display) const { /* Virtual */ }
+void View::DrawSelf(sf::RenderWindow& display) const {
+  /* View is not drawable. */
+}
 
 void View::SetDispositionParams(LayoutParamsPtr disposition_params) {
   disposition_params_ = disposition_params;
 }
 
+void View::SetCriticalSize(const sf::Vector2f& critical_size) {
+  critical_size_ = critical_size;
+  if (GetParent() != nullptr) {
+    GetParent()->UpdateCriticalSize(critical_size_);
+  }
+}
+
+void View::UpdateCriticalSize(const sf::Vector2f& critical_size) {
+  bool size_updated = false;
+
+  if (critical_size_.x < critical_size.x) {
+    critical_size_.x = critical_size.x;
+    size_updated = true;
+  }
+  if (critical_size_.y < critical_size.y) {
+    critical_size_.y = critical_size.y;
+    size_updated = true;
+  }
+
+  if (size_updated && GetParent() != nullptr) {
+    GetParent()->UpdateCriticalSize(critical_size_);
+  }
+}
+
+void View::DeleteCriticalSize(const sf::Vector2f& critical_size) {
+  bool size_updated = false;
+
+  if (critical_size_.x == critical_size.x) {  // Potential "bottle neck" son.
+    critical_size_.x = 0;
+    for (auto son : sons_) {
+      auto son_critical_size = son->GetCriticalSize();
+      // Search for smallest x size of sons.
+      if (critical_size_.x < son_critical_size.x || critical_size_.x == 0) {
+        critical_size_.x = son_critical_size.x;
+      }
+    }
+    ASSERT(critical_size_.x <= critical_size.x);
+    if (critical_size_.x != critical_size.x) {
+      size_updated = true;
+    }
+  }
+  if (critical_size_.y < critical_size.y) {
+    critical_size_.y = 0;
+    for (auto son : sons_) {
+      auto son_critical_size = son->GetCriticalSize();
+
+      if (critical_size_.y < son_critical_size.y || critical_size_.y == 0) {
+        critical_size_.y = son_critical_size.y;
+      }
+    }
+    ASSERT(critical_size_.y <= critical_size.y);
+    if (critical_size_.y != critical_size.y) {
+      size_updated = true;
+    }
+  }
+
+  if (size_updated && GetParent() != nullptr) {
+    GetParent()->DeleteCriticalSize(critical_size);
+  }
+}
+
 const LayoutParamsPtr View::GetDispositionParams() const {
   return disposition_params_;
+}
+
+sf::Vector2f View::GetCriticalSize() const {
+  return critical_size_;
 }
 
 View* View::FindViewById(int id) {

@@ -1,15 +1,106 @@
-<View layout="RelativeLayout" xmlns:layout="layout" xmlns:parent="parent">
-    <View layout="LinearLayout" layout:orientation="horizontal" parent:link="left-upper">
-        <Button name="File" />
-        <Button name="Edit" />
-        <Button name="Help" />
-    </View>
-    <View layout="LinearLayout" layout:orientation="vertical">
-        <Pane layout="GridLayour" name="Basic Instruments" >
-            <Button name="Button1" />
-            <Button name="Button2" />
-            <Button name="Button3" />
-            <Button name="Button4" />
-        </Pane>
+<View layout="LinearLayout" layout:orientation="vertical">
+    <!-- Menubar -->
+    <Sprite layout="LinearLayout" layout:orientation="horizontal" parent:weight="1" color="0xff000000">
+        <Button id="1" texture="media/textures/File.png" criticalWidth="50" criticalHeight="20"/>
+        <Button id="2" texture="media/textures/Edit.png" criticalWidth="50" criticalHeight="20"/>
+        <Button id="3" texture="media/textures/Help.png" criticalWidth="50" criticalHeight="20"/>
+        <!-- Layout empty -->
+        <View parent:weight="20"/>
+    </Sprite>
+
+    <!-- Horizontal layout which places left & right panels and main image -->
+    <View layout="LinearLayout" layout:orientation="horizontal" parent:weight="30">
+        <!-- Left panel -->
+        <Sprite layout="LinearLayout" layout:orientation="vertical" texture="media/textures/left_pane.png" criticalWidth="250">
+            <View parent:weight="0.3"/>
+
+            <Pane headWeight="1.2" parent:weight="0.410">
+                <Tab texture="media/textures/Basic_instruments.png">
+                    <Sprite texture="media/textures/tab.png" layout="LinearLayout" layout:orientation="horizontal" parent:criticalHeight="50">
+                        <Button id="4" texture="media/textures/Icons/pencil.png"/>
+                        <Button id="5" texture="media/textures/Icons/brush.png"/>
+                        <Button id="6" texture="media/textures/Icons/palette.png"/>
+                        <View parent:weight="6"/>
+                    </Sprite>
+                </Tab>
+            </Pane>
+
+            <View parent:weight="0.3"/>
+
+            <Pane headWeight="1.2" parent:weight="0.410">
+                <Tab texture="media/textures/Move_instruments.png">
+                    <Sprite texture="media/textures/tab.png" layout="LinearLayout" layout:orientation="horizontal">
+                        <Button id="4" texture="media/textures/Icons/move.png"/>
+                        <Button id="5" texture="media/textures/Icons/crop.png"/>
+                        <View parent:weight="6.7"/>
+                    </Sprite>
+                </Tab>
+            </Pane>
+
+            <View parent:weight="0.3"/>
+
+            <Pane>
+                <Tab texture="media/textures/Share.png">
+                    <Sprite texture="media/textures/tab.png" layout="LinearLayout" layout:orientation="vertical">
+                        <Button name="VK"        id="10" color="0xffffff00" />
+                        <Button name="Facebook"  id="11" color="0xffffff00" />
+                        <Button name="Instagram" id="12" color="0xffffff00" />
+                    </Sprite>
+                </Tab>
+            </Pane>
+
+            <View parent:weight="1.1"/>
+
+            <!--<Pane>
+                <Tab name="Histogram" layout="LinearLayout" layout:orientation="vertical" >
+                    <Button name="Image here" id="13" parent:weight="3"/>
+                    <Button name="" />
+                </Tab>
+            </Pane>-->
+        </Sprite>
+
+        <!-- Main image -->
+        <Sprite name="Image" parent:weight="3" color="0xffffff11" >
+        </Sprite>
+
+        <!-- Right panel -->
+        <Sprite layout="LinearLayout" layout:orientation="vertical" texture="media/textures/left_pane.png"  criticalWidth="200">
+            <!--<View parent:weight="0.3"/>
+
+            <Pane headWeight="1" parent:weight="0.5">
+                <Tab name="Some pane" layout="LinearLayout" layout:orientation="horizontal">
+                    <Button name="but1" id="13" />
+                    <Button name="but2" id="14" />
+                    <Button name="but3" id="15" />
+                </Tab>
+            </Pane>-->
+
+            <View parent:weight="0.3"/>
+
+            <Pane headWeight="1.15" parent:weight="0.33">
+                <Tab layout="LinearLayout" layout:orientation="vertical" texture="media/textures/History(x)-Colors.png">
+                    <Sprite texture="media/textures/tab.png" layout="LinearLayout" layout:orientation="horizontal">
+                        <Button id="16" texture="media/textures/Icons/new.png" />
+                        <Button id="17" texture="media/textures/Icons/open.png" />
+                        <Button id="18" texture="media/textures/Icons/crop.png" />
+                        <Button id="19" texture="media/textures/Icons/brush.png" />
+                        <View parent:weight="4" />
+                    </Sprite>
+                </Tab>
+
+                <Tab layout="LinearLayout" layout:orientation="vertical" texture="media/textures/History-Colors(x).png">
+                    <Sprite texture="media/textures/tab.png" layout="LinearLayout" layout:orientation="horizontal">
+                        <Button id="20" texture="media/textures/color_box.png" color="0xff0000ff" />
+                        <Button id="21" texture="media/textures/color_box.png" color="0x00ff00ff"  />
+                        <Button id="22" texture="media/textures/color_box.png" color="0x0000ffff"  />
+                        <View parent:weight="4" />
+                        <View/>
+                    </Sprite>
+                </Tab>
+            </Pane>
+
+            <View parent:weight="2.5"/>
+        </Sprite>
+
     </View>
 </View>
